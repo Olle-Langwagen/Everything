@@ -1,8 +1,6 @@
-#Import pygame and sys
 import pygame, sys
 from pygame.locals import *
 
-#Make a ball with gravity
 class Ball:
     def __init__(self, x, y, radius, color, gravity):
         self.x = x
@@ -20,12 +18,17 @@ class Ball:
         self.y += self.velocity
 
         #Check for collision with ramp
-        if self.x - self.radius <= 150 and self.y + self.radius >= 600 - (self.x/3):
+        slope = (600 - 450) / (150)
+        y_intercept = 600 - slope * 150
+        y_val = slope * self.x + y_intercept
+        if self.y + self.radius >= y_val and self.x - self.radius <= 150:
             self.velocity = -self.velocity
+            self.y = max(self.y, y_val - self.radius)
 
         #Check for collision with bottom rectangle
         if self.y + self.radius >= 550 and self.x + self.radius >= 100 and self.x - self.radius <= 300:
             self.velocity = -self.velocity
+            self.y = 550 - self.radius
 
 
 #Set up pygame
@@ -38,7 +41,7 @@ clock = pygame.time.Clock()
 running = True
 
 #Create a ball
-ball = Ball(400, 0, 50, (255, 0, 0), 0.1)
+ball = Ball(100, 100, 50, (60, 100, 100), 0.1)
 
 #Main loop
 while running:
@@ -52,7 +55,7 @@ while running:
 
     #Draw ball and ramp
     screen.fill((0, 0, 0))
-    pygame.draw.rect(screen, (255, 255, 255), (100, 550, 200, 50))
+    pygame.draw.rect(screen, (255, 255, 255), (300, 550, 200, 50))
     pygame.draw.polygon(screen, (255, 255, 255), [(0,600),(150,600),(0,450)])
     ball.draw(screen)
 
@@ -63,7 +66,3 @@ while running:
 #Quit pygame
 pygame.quit()
 sys.exit()
-
-
-if __name__ == '__main__':
-    main()
