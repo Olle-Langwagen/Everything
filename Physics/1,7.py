@@ -10,13 +10,13 @@ def onMouseDrag(MouseX, MouseY):
         pass
 
 #Increase the temperature of the material if the fire contains material
-def increaseTemperature():
+#def increaseTemperature():
+    
+running = True
+while running:
     if fire.contains(material.centerX, material.centerY):
         material.fill='orange'
     else:
         material.fill='red'
-running = True
-while running:
-    increaseTemperature()
     
 cmu_graphics.run()
