@@ -19,6 +19,7 @@ class Ball:
         self.velocity += self.gravity
         self.y += self.velocity
 
+
 #Set up pygame
 pygame.init()
 screen = pygame.display.set_mode((800, 600))

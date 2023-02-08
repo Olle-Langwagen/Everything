@@ -4,7 +4,7 @@ import time
 import random
 import colorama
 from colorama import Fore, Back, Style
-from just_playback import Playback
+#from just_playback import Playback
 
 pokemonHealth = 20
 

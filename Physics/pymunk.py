@@ -9,7 +9,7 @@ pygame.init()
 WIDTH = 800
 HEIGHT = 600
 window = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Elastic Collisions")
+pygame.display.set_caption("elastisk")
 
 # Define objects
 class Object:
@@ -53,14 +53,14 @@ class Object:
             self_velocity_x, other_velocity_x = other_velocity_x, self_velocity_x
             
             # Calculate new x and y velocity components
-            self.x_velocity = self_velocity_x * math.cos(angle) - self_velocity_y * math.sin(angle)   
+            self.x_velocity = self_velocity_x * math.cos(angle) + self_velocity_y * math.sin(angle)   
             self.y_velocity = self_velocity_y * math.cos(angle) - self_velocity_x * math.sin(angle)
             other.x_velocity = other_velocity_x * math.cos(angle) - other_velocity_y * math.sin(angle)
             other.y_velocity = other_velocity_y * math.cos(angle) + other_velocity_x * math.sin(angle)
 
 # Create objects
-object1 = Object(100, 100, 50, (255, 0, 0), 2, 3)
-object2 = Object(400, 400, 30, (0, 255, 0), -2, -3)
+object1 = Object(100, 100,200, (255, 0, 0), 2, 3)
+object2 = Object(400, 400, 100, (0, 255, 0), -2, -3)
 
 # Game loop
 running = True
@@ -79,13 +79,15 @@ while running:
     object2.draw(window)
     
     # Check for collision
+    
     object1.check_collision(object2)
+
     
     # Update display
     pygame.display.update()
     
     # Slow down the program
-    pygame.time.delay(0)  # 60 FPS
+    #pygame.time.delay(10)  # 60 FPS
 
 # Quit Pygame
 pygame.quit()
