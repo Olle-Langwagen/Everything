@@ -5,41 +5,43 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script>
-      window.onload = function() {
-        fetch("products.json")
-  .then(response => response.json())
-  .then(products => {
-    if (!Array.isArray(products)) {
-      throw new Error("Products is not an array.");
-    }
-    const productTemplate = document.getElementById("product-template");
-    const productsContainer = document.getElementById("products");
-    products.forEach(product => {
-              const productDiv = document.createElement("div");
-              productDiv.innerHTML = productTemplate.innerHTML;
-              productDiv.querySelector(".product-image").src = product.image;
-              productDiv.querySelector(".product-name").innerHTML = product.name;
-              productDiv.querySelector(".product-description").innerHTML = product.description;
-              productDiv.querySelector(".product-price").innerHTML = product.price;
-              productsContainer.appendChild(productDiv);
-            });
-            
-          });
-      }
-    </script>
 </head>
 <body>
-  <div id="products">
-    <!-- Product Template -->
-    <template id="product-template">
-      <div class="product">
-        <img src="" class="product-image">
-        <h3 class="product-name"></h3>
-        <p class="product-description"></p>
-        <p class="product-price"></p>
+    <div id="products">
+        <!-- Product Template -->
+        <template id="product-template">
+          <div class="product">
+            <img src="" class="product-image">
+            <h3 class="product-name"></h3>
+            <p class="product-description"></p>
+            <p class="product-price"></p>
+          </div>
+        </template>
       </div>
-    </template>
-  </div>
+      
+      <script>
+        // Step 2: Retrieve the JSON data
+        fetch('products.json')
+          .then(response => response.json())
+          .then(data => {
+            // Step 3: Parse the JSON data
+            const products = data.products;
+            
+            // Step 4: Dynamically update the HTML elements
+            const productContainer = document.querySelector('#products');
+            const productTemplate = document.querySelector('#product-template');
+            
+            products.forEach(product => {
+              const productElement = productTemplate.content.cloneNode(true);
+              productElement.querySelector('.product-image').src = product.image;
+              productElement.querySelector('.product-name').textContent = product.name;
+              productElement.querySelector('.product-description').textContent = product.description;
+              productElement.querySelector('.product-price').textContent = product.price;
+              
+              productContainer.appendChild(productElement);
+            });
+          });
+      </script>
+      
 </body>
 </html>

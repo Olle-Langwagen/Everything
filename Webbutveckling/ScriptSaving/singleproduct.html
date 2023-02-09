@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop</title>
+    <script src="https://kit.fontawesome.com/cb6bb63253.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <section id="header">
+        <a href="#top"><img src="images\slippers-gc50344fc2_640.png" class="logo" alt="logo" style="height: 80px; width: 51,25px;"></a>        
+        <div>
+            <ul id="navbar">
+                <li><a href="index.html">Home</a></li>
+                <li><a class="active" href="shop.html">Shop</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a id="mobile-nav-cart" href="cart.html"><i class="fa fa-cart-shopping"></i></a></li>
+                <a href="#" id="close"><i class="fa fa-times"></i></a>
+            </ul>
+        </div>
+        <div id="mobile">
+            <a href="cart.html"><i class="fa fa-cart-shopping"></i></a>
+            <i id="bar" class="fas fa-outdent"></i>
+            
+        </div>
+    </section>
+
+    <section id="prodetails" class="section-p1">
+        <div>
+            <div class="single-pro-image">
+                <img src="" width="100%" id="MainImg" alt="product">
+
+                <div class="small-img-group">
+                    <div class="small-img-col">
+                        <img src="images\f1.jpg" width="100%" class="small-img" alt="">
+                    </div>
+                    <div class="small-img-col">
+                        <img src="images\f2.jpg" width="100%" class="small-img" alt="">
+                    </div>
+                    <div class="small-img-col">
+                        <img src="images\f3.jpg" width="100%" class="small-img" alt="">
+                    </div>
+                    <div class="small-img-col">
+                        <img src="images\f4.jpg" width="100%" class="small-img" alt="">
+                    </div>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        <div class="single-pro-details">
+            <h6>Home/Shop</h6>
+            <h4>Men</h4>
+            <h2>1000 kr</h2>
+            <select>
+                <option>Select Size</option>
+                <option>Small</option>
+                <option>Medium</option>
+                <option>Large</option>
+                <option>Extra Large</option>
+            </select>
+            <input type="number" value="1">
+            <button class="button-normal">Add To Cart</button>
+            <h4>Product Details</h4>
+            <span>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </span>
+        </div>
+    </section>
+
+    <section id="newsletter" class="section-p1 section-m1">
+        <div class="newstext">
+            <h4 id="news-h4">Subscribe to our newsletter</h4>
+            <p class="news-p">Get the latest news and <span>offers</span></p>
+        </div>
+        <div class="form">
+            <input id="news-input" type="text" placeholder="Enter your email">
+            <button class="button-normal" id="news-button">Subscribe</button>
+        </div>
+    </section>
+    
+    <footer class="section-p1">
+        <div class="col">
+            <h4>Contact</h4>
+            <p><strong>Address:</strong> 8194 West St. Middletown, NY 10940</p>
+            <p><strong>Phone:</strong> 202-555-0110</p>
+            <p><strong>Hours:</strong> 09:00 - 23:45, Mon - Sun</p>
+            <div class="follow">
+                <h4>Follow us</h4>
+                <div class="footer-social">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>    
+            </div>
+
+        </div>
+
+        <div class="col">
+            <h4>About</h4>
+            <a href="#">About Us</a>
+            <a href="#">Our Services</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms & Conditions</a>
+
+        </div>
+        <div class="col">
+            <h4>Support</h4>
+            <a href="#">FAQ</a>
+            <a href="#">Contact Us</a>
+            <a href="#">Shipping</a>
+            <a href="#">Returns</a>
+            <a href="#">Order Status</a>
+        </div>
+       
+        
+
+        <div class="copyright">
+            <p>© 2021 All rights reserved</p>
+        </div>
+    </footer>
+
+    <script>
+        var MainImg = document.getElementById("MainImg");
+        var SmallImg = document.getElementsByClassName("small-img");
+
+        SmallImg[0].onclick = function()
+        {
+            MainImg.src = SmallImg[0].src;
+        }
+        SmallImg[1].onclick = function()
+        {
+            MainImg.src = SmallImg[1].src;
+        }
+        SmallImg[2].onclick = function()
+        {
+            MainImg.src = SmallImg[2].src;
+        }
+        SmallImg[3].onclick = function()
+        {
+            MainImg.src = SmallImg[3].src;
+        }
+        let urlParams = new URLSearchParams(window.location.search);
+  let productName = urlParams.get("productName");
+  let productDescription = urlParams.get("productDescription");
+  let productImg = urlParams.get("productImg");
+
+  // Populate the page with the data
+  document.getElementById("MainImg").src = productImg;
+  document.querySelector(".single-pro-details h4").innerHTML = productName;
+  document.querySelector(".single-pro-details span").innerHTML = productDescription;
+    </script>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
