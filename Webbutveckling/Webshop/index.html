@@ -22,25 +22,18 @@
       <script>
         // Step 2: Retrieve the JSON data
         fetch('products.json')
-          .then(response => response.json())
-          .then(data => {
-            // Step 3: Parse the JSON data
-            const products = data.products;
-            
-            // Step 4: Dynamically update the HTML elements
-            const productContainer = document.querySelector('#products');
-            const productTemplate = document.querySelector('#product-template');
-            
-            products.forEach(product => {
-              const productElement = productTemplate.content.cloneNode(true);
-              productElement.querySelector('.product-image').src = product.image;
-              productElement.querySelector('.product-name').textContent = product.name;
-              productElement.querySelector('.product-description').textContent = product.description;
-              productElement.querySelector('.product-price').textContent = product.price;
-              
-              productContainer.appendChild(productElement);
-            });
-          });
+    .then(response => response.json())
+    .then(data => {
+      // Step 3: Parse the JSON data
+      const product = data.products[0]; // Example of getting the first product from the JSON data
+
+      // Step 4: Dynamically update the HTML elements
+      const productContainer = document.querySelector('#product1');
+      productContainer.querySelector('.product-image').src = product.image;
+      productContainer.querySelector('.product-name').textContent = product.name;
+      productContainer.querySelector('.product-description').textContent = product.description;
+      productContainer.querySelector('.product-price').textContent = product.price;
+    });
       </script>
       
 </body>

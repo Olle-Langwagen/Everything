@@ -18,7 +18,7 @@ frigde=Rect(500,100,100,100,fill="blue")
 thermometerScale=Rect(700,100,50,400,fill=(gradient('blue','red', start='bottom')))
 
 #Create a temperature variable
-temperature = Label(0, 20, 20, size=50)
+temperature = Label(0, 40, 20, size=50)
 
 #Create a thermometer pointer
 thermometerPointer=Rect(700,300,50,10,fill='black')
