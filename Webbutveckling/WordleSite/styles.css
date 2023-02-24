@@ -1,0 +1,85 @@
+#container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .word-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .letter-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+    border: 1px solid black;
+    margin: 10px;
+  }
+  
+  .guesses-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+  }
+  
+  .guess-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    font-size: 32px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 80px;
+    color: white;
+    background-color: #444;
+    margin: 10px;
+  }
+  
+  .red {
+    background-color: #ff3b3b;
+  }
+  
+  .orange {
+    background-color: #ff9f3b;
+  }
+  
+  .yellow {
+    background-color: #ffe43b;
+  }
+  
+  .green {
+    background-color: #3bff3b;
+  }
+  
+  .blue {
+    background-color: #3b9fff;
+  }
+  
+  .purple {
+    background-color: #b83bff;
+  }
+  
+  .input-container {
+    margin-top: 50px;
+  }
+  
+  input[type="text"] {
+    font-size: 24px;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    margin: 10px;
+  }
+  
