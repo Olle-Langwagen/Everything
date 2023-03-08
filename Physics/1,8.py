@@ -1,11 +1,11 @@
 import pygame
 
 # Definiera initiala parametrar
-material_temp = 25  # K
-hot_surface_temp = 1000  # K
-cold_surface_temp = 200  # K
-hot_surface_area = 0.1  # m^2
-cold_surface_area = 0.1  # m^2
+material_temp = 293  # K
+hot_surface_temp = 473  # K
+cold_surface_temp = 243  # K
+hot_surface_area = 400  # m^2
+cold_surface_area = 400  # m^2
 
 # Definiera materialen
 material_1 = {
@@ -13,6 +13,7 @@ material_1 = {
     "density": 2700,  # kg/m^3
     "specific_heat_capacity": 910,  # J/(kg*K)
     "thermal_conductivity": 205,  # W/(m*K)
+    "heat_transfer_coefficient": 100  # W/(m^2*K)
 }
 
 material_2 = {
@@ -20,12 +21,14 @@ material_2 = {
     "density": 899,  # kg/m^3
     "specific_heat_capacity": 386,  # J/(kg*K)
     "thermal_conductivity": 401,  # W/(m*K)
+    "heat_transfer_coefficient": 100  # W/(m^2*K)
 }
 
 # Funktion för att beräkna materialets temperatur när det är på en yta
-def calculate_material_temperature(material, surface_temp, surface_area, initial_material_temp, time_on_surface):
+def calculate_material_temperature(material, surface_temp, surface_area, initial_material_temp, time_on_surface, time_step):
     mass = material["density"] * surface_area * 0.001  # Konvertera till kg
-    energy_transfer = material["thermal_conductivity"] * surface_area * (surface_temp - initial_material_temp) * time_on_surface
+    energy_transfer_rate = material["heat_transfer_coefficient"] * surface_area * (surface_temp - initial_material_temp)
+    energy_transfer = energy_transfer_rate * time_step
     energy_change = material["specific_heat_capacity"] * mass * (surface_temp - initial_material_temp)
     final_temp = initial_material_temp + (energy_transfer + energy_change) / (material["specific_heat_capacity"] * mass)
     return final_temp
@@ -58,14 +61,16 @@ hot_surface_color = (255, 0, 0)
 cold_surface_line = pygame.Rect(0, win_height - 50, win_width, 50)
 cold_surface_color = (0, 0, 255)
 
-# Håll koll på om användaren håller musknappen nere för att dra materialet
 dragging_material = False
 
-# Skapa variabler för att hålla koll på tiden som kuben är över varje material
 time_on_hot_surface = 0
 time_on_cold_surface = 0
 
-# Spel-loop
+energy_to_add = 0
+energy_to_remove = 0
+
+heat_transfer_time = 0.5 # sekunder
+
 while True:
     # Hantera händelser
     for event in pygame.event.get():
@@ -82,23 +87,41 @@ while True:
                 dragging_material = False
                 time_on_hot_surface = 0
                 time_on_cold_surface = 0
-
-    # Uppdatera materialets position och temperatur om användaren drar materialet
+        # Uppdatera materialets position och temperatur om användaren drar materialet
     if dragging_material:
         material_rect.center = pygame.mouse.get_pos()
         if material_rect.colliderect(hot_surface_line):
             time_on_hot_surface += clock.get_time() / 1000
-            material_temp = calculate_material_temperature(material_1, hot_surface_temp, hot_surface_area, material_temp, time_on_hot_surface)
+            energy_to_add += material_1["heat_transfer_coefficient"] * hot_surface_area * (hot_surface_temp - material_temp) * (clock.get_time() / 1000)
         elif material_rect.colliderect(cold_surface_line):
             time_on_cold_surface += clock.get_time() / 1000
-            material_temp = calculate_material_temperature(material_2, cold_surface_temp, cold_surface_area, material_temp, -time_on_cold_surface)
+            energy_to_remove += material_2["heat_transfer_coefficient"] * cold_surface_area * (material_temp - cold_surface_temp) * (clock.get_time() / 1000)
         temp_text = font.render("Materialtemperatur: {} K".format(round(material_temp, 2)), True, (255, 255, 255))
+
+    if energy_to_add > 0:
+        energy_to_remove = 0
+        time_on_cold_surface = 0
+        time_on_hot_surface += clock.get_time() / 1000
+        energy_added = min(energy_to_add, material_1["specific_heat_capacity"] * material_1["density"] * hot_surface_area * (hot_surface_temp - material_temp) * heat_transfer_time)
+        material_temp += energy_added / (material_1["specific_heat_capacity"] * material_1["density"] * hot_surface_area)
+        energy_to_add -= energy_added
+    elif energy_to_remove > 0:
+        energy_to_add = 0
+        time_on_hot_surface = 0
+        time_on_cold_surface += clock.get_time() / 1000
+        energy_removed = min(energy_to_remove, material_2["specific_heat_capacity"] * material_2["density"] * cold_surface_area * (material_temp - cold_surface_temp) * heat_transfer_time)
+        material_temp -= energy_removed / (material_2["specific_heat_capacity"] * material_2["density"] * cold_surface_area)
+        energy_to_remove -= energy_removed
+    else:
+        time_on_hot_surface = 0
+        time_on_cold_surface = 0
 
     # Rita allt på skärmen
     win.fill((0, 0, 0))
     pygame.draw.rect(win, hot_surface_color, hot_surface_line)
     pygame.draw.rect(win, cold_surface_color, cold_surface_line)
     pygame.draw.rect(win, (0, 255, 0), material_rect)
+    win.blit(temp_text, temp_text_rect)
     win.blit(temp_text, temp_text_rect)
 
     # Uppdatera skärmen
