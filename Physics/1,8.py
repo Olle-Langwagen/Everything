@@ -3,7 +3,7 @@ import pygame
 # Definiera initiala parametrar
 material_temp = 293  # K
 hot_surface_temp = 980  # K
-cold_surface_temp = -100002  # K
+cold_surface_temp = 2  # K
 hot_surface_area = 0.01  # m^2
 cold_surface_area = 0.1  # m^2
 
