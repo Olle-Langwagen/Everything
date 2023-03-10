@@ -2,10 +2,10 @@ import pygame
 
 # Definiera initiala parametrar
 material_temp = 293  # K
-hot_surface_temp = 473  # K
-cold_surface_temp = 243  # K
-hot_surface_area = 400  # m^2
-cold_surface_area = 400  # m^2
+hot_surface_temp = 980  # K
+cold_surface_temp = -100002  # K
+hot_surface_area = 0.01  # m^2
+cold_surface_area = 0.1  # m^2
 
 # Definiera materialen
 material_1 = {
@@ -26,11 +26,11 @@ material_2 = {
 
 # Funktion för att beräkna materialets temperatur när det är på en yta
 def calculate_material_temperature(material, surface_temp, surface_area, initial_material_temp, time_on_surface, time_step):
-    mass = material["density"] * surface_area * 0.001  # Konvertera till kg
-    energy_transfer_rate = material["heat_transfer_coefficient"] * surface_area * (surface_temp - initial_material_temp)
-    energy_transfer = energy_transfer_rate * time_step
-    energy_change = material["specific_heat_capacity"] * mass * (surface_temp - initial_material_temp)
-    final_temp = initial_material_temp + (energy_transfer + energy_change) / (material["specific_heat_capacity"] * mass)
+    mass = material["density"] * surface_area * 0.001  # Massa (kg) = densitet (kg/m^3) * area (m^2) * tjocklek (m)
+    energy_transfer_rate = material["heat_transfer_coefficient"] * surface_area * (surface_temp - initial_material_temp)  # Energiöverföringshastighet (W) = värmeöverföringskoefficient (W/(m^2*K)) * area (m^2) * temperaturskillnad (K)
+    energy_transfer = energy_transfer_rate * time_step  # Energiöverföring (J) = energiöverföringshastighet (W) * tid (s)
+    energy_change = material["specific_heat_capacity"] * mass * (surface_temp - initial_material_temp)  # Energiförändring (J) = specifik värmekapacitet (J/(kg*K)) * massa (kg) * temperaturskillnad (K)
+    final_temp = initial_material_temp + (energy_transfer + energy_change) / (material["specific_heat_capacity"] * mass)  # Slutlig temperatur (K) = initial temperatur (K) + (energiöverföring (J) + energiförändring (J)) / (specifik värmekapacitet (J/(kg*K)) * massa (kg))
     return final_temp
 
 # Initera Pygame
@@ -121,7 +121,6 @@ while True:
     pygame.draw.rect(win, hot_surface_color, hot_surface_line)
     pygame.draw.rect(win, cold_surface_color, cold_surface_line)
     pygame.draw.rect(win, (0, 255, 0), material_rect)
-    win.blit(temp_text, temp_text_rect)
     win.blit(temp_text, temp_text_rect)
 
     # Uppdatera skärmen
