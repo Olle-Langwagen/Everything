@@ -1,0 +1,1 @@
+# Main script for the chess game (GUI), includes user input and game logic. Does not include AI and displays Game Objects.

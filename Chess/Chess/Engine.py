@@ -1,0 +1,1 @@
+# Storing the information about the current state of the game. It will determine valid moves and check for checkmate. It will also keep track of the game history.
