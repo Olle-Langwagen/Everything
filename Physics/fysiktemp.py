@@ -86,7 +86,7 @@ class IronMaterial(Material):
 class GoldMaterial(Material):
     def __init__(self, x, y):
         super().__init__(x, y)
-        self.image.fill((212, 175, 55))  # Färg som motsvarar guld
+        self.image.fill(WHITE)  # Färg som motsvarar guld
         self.mass = 19.3 * 10 ** 3  # Densitet (kg/m^3) av guld
         self.thermal_conductivity = 318  # Termisk konduktivitet (W/(m*K)) av guld
         self.specific_heat_capacity = 129  # Specifik värmekapacitet (J/(kg*K)) av guld
