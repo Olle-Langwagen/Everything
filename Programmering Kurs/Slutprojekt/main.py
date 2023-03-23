@@ -5,10 +5,25 @@ import pygame
 pygame.display.set_caption("Platformer")
 # Set up the pygame window
 pygame.init()
-SCREENWIDTH, SCREENHEIGHT = 1280, 720
+SCREENWIDTH, SCREENHEIGHT = 1000, 600
 window = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
 bg = pygame.image.load("Programmering Kurs/Slutprojekt/Images/BG.jpeg")
 
+
+
+
+# Player class
+
+class Player(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        self.image = pygame.image.load("Programmering Kurs/Slutprojekt/Images/player.png")
+        self.rect = self.image.get_rect()
+
+        self.x = x
+        self.y = y
+
+
+Player(100, 10)
 # Set up the game loop
 running = True
 while running:
