@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+</head>
+<body>
+    <form id="searchForm">
+        <!-- Region Select -->
+        <label for="regionSelect">Region:</label>
+        <select name="region" id="regionSelect">
+          <!-- options for regions -->
+            <option value="eu">EU</option>
+            <option value="us">US</option>
+        </select>
+      
+        <!-- Realm Input -->
+        <label for="realm">Realm:</label>
+        <input type="text" name="realm" id="realmInput" placeholder="Enter Realm Name">
+      
+        <!-- Item Input -->
+        <label for="item">Item:</label>
+        <input type="text" name="item" id="itemInput" placeholder="Enter Item Name">
+      
+        <!-- Submit Button -->
+        <button type="submit" id="searchButton" class="button-a-normal">Search Auctions</button>
+      </form>
+  
+  <!-- Auctions Container -->
+  <div id="auctionContainer"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
