@@ -1,4 +1,4 @@
-from ursina import *
+from ftf6 import *
 from ursina.prefabs.first_person_controller import FirstPersonController
 
 

@@ -61,10 +61,9 @@ function fetchOAuthToken(region, realm, item) {
       })
       .catch(error => console.error(error));
   }
-  
   async function fetchAuctions(region, realm, item, access_token) {
     const realmId = await getRealmId(region, realm, access_token);
-  
+    console.log(realmId)
     const auctionsUrl = `https://${region}.api.blizzard.com/data/wow/connected-realm/${realmId}/auctions?namespace=dynamic-${region}&locale=en_${region.toUpperCase()}&access_token=${access_token}`;
   
     fetch(auctionsUrl)
@@ -78,17 +77,43 @@ function fetchOAuthToken(region, realm, item) {
         // Log the complete auctions data for debugging
         console.log('Auctions Data:', data.auctions);
   
-        // Filter auctions based on the item ID
-const filteredAuctions = data.auctions.filter(auction => {
-    // Check if the auction has an item and the item ID matches
-    return auction.item && auction.item.id === parseInt(item);
-  });
+        // Filter auctions based on the item name
+        const filteredAuctions = [];
+        const fetchItemDataPromises = data.auctions.map(auction => {
+          const itemMediaUrl = `https://${region}.api.blizzard.com/data/wow/media/item/${auction.item.id}?namespace=static-${region}&locale=en_${region.toUpperCase()}&access_token=${access_token}`;
   
-  // Log the filtered auctions for debugging
-  console.log('Filtered Auctions:', filteredAuctions);
+          return fetch(itemMediaUrl)
+            .then(response => response.json())
+            .then(mediaData => {
+              const asset = mediaData.assets.find(a => a.key === 'icon');
+              const itemName = mediaData.name || 'Unknown Item';
   
-        // Display the filtered auctions
-        displayAuctions(filteredAuctions);
+              // Check if the item name matches (case-insensitive)
+              if (itemName.toLowerCase().includes(item.toLowerCase())) {
+                filteredAuctions.push(auction);
+              }
+            })
+            .catch(error => {
+              console.error(error);
+              // Handle error while fetching item data
+            });
+        });
+  
+        // Wait for all item data fetches to complete
+        Promise.all(fetchItemDataPromises)
+        .then(() => {
+          // Log the filtered auctions for debugging
+          console.log('Filtered Auctions:', filteredAuctions);
+
+          // Display the filtered auctions
+          displayAuctions(filteredAuctions, access_token, region);
+        })
+        .catch(error => {
+          console.error(error);
+          const errorMessage = document.createElement('p');
+          errorMessage.textContent = 'An error occurred while retrieving auction data. Please try again later.';
+          document.getElementById('auctionContainer').appendChild(errorMessage);
+        });
       })
       .catch(error => {
         console.error(error);
@@ -109,8 +134,7 @@ document.getElementById('searchForm').addEventListener('submit', function(event)
     // Fetch OAuth token and initiate auction retrieval
     fetchOAuthToken(region, realm, item);
   });
-// Function to display the auctions
-function displayAuctions(auctions) {
+  function displayAuctions(auctions, accessToken, region) {
     const auctionContainer = document.getElementById('auctionContainer');
     auctionContainer.innerHTML = ''; // Clear the previous results
   
@@ -120,7 +144,7 @@ function displayAuctions(auctions) {
       auctionContainer.appendChild(errorMessage);
       return;
     }
-  
+    console.log('Item ID:', auctions);
     auctions.forEach(auction => {
       // Create auction div and populate it with auction
       const auctionDiv = document.createElement('div');
@@ -142,19 +166,30 @@ function displayAuctions(auctions) {
       imgDiv.className = 'img';
       const img = document.createElement('img');
       img.alt = auction.item.name;
-      const itemMediaUrl = `https://${region}.api.blizzard.com/data/wow/media/item/${auction.item.id}?namespace=static-${region}&locale=en_${region.toUpperCase()}&access_token=${accessToken}`;
-      fetch(itemMediaUrl)
-        .then(response => response.json())
-        .then(mediaData => {
-          const asset = mediaData.assets.find(a => a.key === 'icon');
-          if (asset) {
-            img.src = asset.value;
-          }
-        })
-        .catch(error => {
-          console.error(error);
-          img.src = 'https://dummyimage.com/56x56/000/fff.png&text=No+Image';
-        });
+      
+      const fetchItemDataPromises = data.auctions.map(auction => {
+        const itemMediaUrl = `https://${region}.api.blizzard.com/data/wow/media/item/${auction.item.id}?namespace=static-${region}&locale=en_${region.toUpperCase()}&access_token=${accessToken}`;
+    
+        return fetch(itemMediaUrl)
+          .then(response => response.json())
+          .then(mediaData => {
+            const asset = mediaData.assets.find(a => a.key === 'icon');
+            const itemName = mediaData.name || 'Unknown Item';
+    
+            // Check if the item name matches (case-insensitive)
+            if (itemName.toLowerCase().includes(item.toLowerCase())) {
+              filteredAuctions.push(auction);
+            }
+    
+            console.log('Item ID:', auction.item.id); // Add this line to log the item ID
+          })
+          .catch(error => {
+            console.error(error);
+            img.src = 'https://dummyimage.com/56x56/000/fff.png&text=No+Image';
+            // Handle error while fetching item data
+          });
+      });
+
       imgDiv.appendChild(img);
       itemDiv.appendChild(imgDiv);
       const nameDiv = document.createElement('div');
@@ -175,6 +210,7 @@ function displayAuctions(auctions) {
       auctionDiv.appendChild(quantityDiv);
   
       auctionContainer.appendChild(auctionDiv);
+      
     });
   
     // Initialize Wowhead tooltips
