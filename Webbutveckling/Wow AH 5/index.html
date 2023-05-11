@@ -4,11 +4,50 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--Styles-->
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js"></script>
+    <script src="https://wow.zamimg.com/widgets/power.js"></script> <!--Wowhead tooltip. (hovering over items)-->
     <title>Document</title>
 </head>
 <body>
+    <div>
+      
     
+      <div class="form">
+        <form>
+            <label for="region-select">Region:</label>
+            <select id="region-select">
+                <option value="">Select a region</option>
+                <option value="us">US</option>
+                <option value="eu">EU</option>
+            </select>
 
-    <script src="script.js"></script>
+            <label for="realm-select">Realm:</label>
+            <select id="realm-select">
+                <option value="">Select a realm</option>
+            </select>
+
+            <input type="text" id="search-input" placeholder="Search auctions...">
+            <button type="button" id="search-button" class="button-a-normal">Load Auction House</button>
+        </form>
+      </div>
+
+      <div class="auctions-header">
+        <div class="price-header">Price</div>
+        <div class="item-header">Item Name</div>
+        <div class="quantity-header">Quantity</div>
+      </div>
+
+    <div id="loading-container" style="display: none;">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <div id="auctions-container"></div>
+
+    <div id="pagination-container">
+        <button id="prev-button" disabled>Previous</button>
+        <button id="next-button" disabled>Next</button>
+      </div>
 </body>
 </html>
