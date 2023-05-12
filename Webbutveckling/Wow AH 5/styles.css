@@ -33,6 +33,64 @@ body{
 }
 
 
+/*Nav with Text in middle and links below*/
+.nav-links {
+  display: flex;
+  justify-content: center;
+  align-items: center; /* add this to vertically center the links */
+  background-color: #000000;
+  color: #ffffff;
+  font-size: 1.6rem;
+
+}
+.nav-links ul {
+  display: flex;
+  flex-direction: row; /* set the direction to row */
+  justify-content: center;
+  align-items: center;
+}
+.nav-links li {
+  margin: 0 1rem; /* add some horizontal spacing between the links */
+  list-style: none;
+}
+
+.nav-links a {
+  color: #ffffff;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+
+/*Character Lookup Text*/
+.split-text-wrapper {
+  display: grid;
+  place-content: center;
+  background-color: #000000;
+  min-height: 16rem;
+  font-family: "Oswald", sans-serif;
+  font-size: clamp(1.5rem, 1rem + 18vw, 6rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-color);
+}
+
+.split-text-wrapper > div {
+  grid-area: 1/1/-1/-1;
+}
+.top {
+  clip-path: polygon(0% 0%, 100% 0%, 100% 48%, 0% 58%);
+  
+}
+.bottom {
+  clip-path: polygon(0% 60%, 100% 50%, 100% 100%, 0% 100%);
+  color: transparent;
+  background: -webkit-linear-gradient(177deg, black 53%, var(--text-color) 65%);
+  background: linear-gradient(177deg, black 53%, var(--text-color) 65%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  transform: translateX(-0.02em);
+}
+
 
 
 
