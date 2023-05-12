@@ -16,40 +16,40 @@ fetch('https://us.battle.net/oauth/token', {
     const url = `https://us.api.blizzard.com/data/wow/connected-realm/${REALM}/auctions?namespace=dynamic-us&locale=en_US&access_token=${access_token}`;
 
     fetch(url)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(response.statusText);
-        }
-        return response.json();
-      })
-      .then(data => {
-        const auctions = data.auctions.slice(0, 50);
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+    return response.json();
+  })
+  .then(data => {
+    const auctions = data.auctions; // Replace this line with the updated code
 
-        if (auctions.length === 0) {
-          const errorMessage = document.createElement('p');
-          errorMessage.textContent = 'No auctions found.';
-          document.getElementById('auctions-container').appendChild(errorMessage);
-          return;
-        }
+    if (auctions.length === 0) {
+      const errorMessage = document.createElement('p');
+      errorMessage.textContent = 'No auctions found.';
+      document.getElementById('auctions-container').appendChild(errorMessage);
+      return;
+    }
 
-        const itemIds = auctions.map(auction => auction.item.id);
+    const itemIds = auctions.map(auction => auction.item.id);
 
-        const itemPromises = itemIds.map(itemId =>
-          fetch(`https://us.api.blizzard.com/data/wow/item/${itemId}?namespace=static-us&locale=en_US&access_token=${access_token}`)
-            .then(response => {
-              if (!response.ok) {
-                throw new Error(response.statusText);
-              }
-              return response.json();
-            })
-        );
+    const itemPromises = itemIds.map(itemId =>
+      fetch(`https://us.api.blizzard.com/data/wow/item/${itemId}?namespace=static-us&locale=en_US&access_token=${access_token}`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(response.statusText);
+          }
+          return response.json();
+        })
+    );
 
-        Promise.all(itemPromises)
-          .then(itemData => {
-            const itemsById = {};
-            itemData.forEach(item => {
-              itemsById[item.id] = item.name;
-            });
+    Promise.all(itemPromises)
+      .then(itemData => {
+        const itemsById = {};
+        itemData.forEach(item => {
+          itemsById[item.id] = item.name;
+        });
 
 
 
