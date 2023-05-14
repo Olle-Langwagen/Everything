@@ -9,7 +9,7 @@ html{
 
 }
 body{
-    background-color: rgb(57, 91, 67);
+    background-color: rgb(67, 71, 69);
     color: #fff;
     font-family: 'Open Sans', sans-serif;
     line-height: 1.5;
@@ -32,12 +32,34 @@ body{
 
 }
 
+.token-box {
+  display: inline-block;
+  background-color: #f2f2f2;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.token-region {
+  color: red;
+  font-weight: bold;
+}
+
+.token-price {
+  color: black;
+  font-weight: bold;
+}
+.nav-wrapper{
+  margin-top: -2rem;
+  margin-left: 4rem;
+  display: flex;
+  justify-content: left;
+}
+
 
 /*Nav with Text in middle and links below*/
+/*
 .nav-links {
-  display: flex;
-  justify-content: center;
-  align-items: center; /* add this to vertically center the links */
+
   background-color: #000000;
   color: #ffffff;
   font-size: 1.6rem;
@@ -45,12 +67,12 @@ body{
 }
 .nav-links ul {
   display: flex;
-  flex-direction: row; /* set the direction to row */
+  flex-direction: row;
   justify-content: center;
   align-items: center;
 }
 .nav-links li {
-  margin: 0 1rem; /* add some horizontal spacing between the links */
+  margin: 0 1rem;
   list-style: none;
 }
 
@@ -59,13 +81,13 @@ body{
   text-decoration: none;
   transition: all 0.3s ease;
 }
-
+*/
 
 /*Character Lookup Text*/
 .split-text-wrapper {
   display: grid;
   place-content: center;
-  background-color: #000000;
+  background-color: rgb(67, 71, 69);
   min-height: 16rem;
   font-family: "Oswald", sans-serif;
   font-size: clamp(1.5rem, 1rem + 18vw, 6rem);

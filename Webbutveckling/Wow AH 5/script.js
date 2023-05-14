@@ -1,3 +1,4 @@
+
 const CLIENT_ID = 'fb766b47b70a44018d9ef888f284d5bf';
 const CLIENT_SECRET = 'svU5ftd1jUO9eVe226zbZi37DHzvHNYf';
 
@@ -13,6 +14,7 @@ fetch('https://us.battle.net/oauth/token', {
   .then(response => response.json())
   .then(data => {
     const accessToken = data.access_token;
+
     console.log(`Access token: ${accessToken}`);
 
     // Function to fetch the realm list

@@ -7,6 +7,7 @@
     <!--Styles-->
     <link rel="stylesheet" href="styles.css">
     <script src="script.js"></script>
+    <script src="token.js"></script>
     <script src="https://wow.zamimg.com/widgets/power.js"></script> <!--Wowhead tooltip. (hovering over items)-->
     <title>Document</title>
 </head>
@@ -19,6 +20,7 @@
             <div class="top">Oribos Exchange</div>
             <div class="bottom" aria-hidden="true">Oribos Exchange</div>
         </div>
+        <!--
         <div class="nav-links">
             <ul>
                 <li><a href="index.html">Home</a></li>
@@ -26,9 +28,20 @@
                 <li><a href="contact.html">Contact</a></li>
             </ul>
         </div>
+        -->
     </div>
   </nav>
-
+    <!-- US token price container -->
+<div class="token-box">
+    <span class="token-region">US:</span>
+    <span id="us-price" class="token-price"></span>
+  </div>
+  
+  <!-- EU token price container -->
+  <div class="token-box">
+    <span class="token-region">EU:</span>
+    <span id="eu-price" class="token-price"></span>
+  </div>
 
 
   <div class="form">
