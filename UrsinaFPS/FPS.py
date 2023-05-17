@@ -19,8 +19,8 @@ pickup.visible = False
 #gun
 playergun = Entity(model="cube", position=(0.25,-0.25,1), parent=camera, scale=(0.1,0.1,1), origin_z=0.5, on_cooldown=False, color=color.light_gray,shader=basic_lighting_shader)
 playergun.muzzle_flash = Entity(parent=playergun, z=1, y=-2, x=2, world_scale=.3, model='quad', color=color.yellow, enabled=False)
-
-
+gun_damage = 10
+damage_text = Text(text='dm', position=(0, 0))
 #obstacles and ground
 ground = Entity(model='plane', collider='box', scale=64, texture='Assets/pexels-stefwithanf-3580088-1920x1080-25fps.mp4',shader=basic_lighting_shader)
 for i in range(10):
@@ -36,6 +36,27 @@ for i in range(10):
 timer = Text(text='0', position=(-0.87,0.47), t=0)
 pickup_timer = Text(text='0', position=(-0.64,0.47), t=0)
 pickup_text = Text(text='Pickup in: ', position=(-0.76,0.47))
+
+
+#skjuta
+def shoot():
+    if not playergun.on_cooldown:
+        playergun.on_cooldown = True
+        playergun.muzzle_flash.enabled = True
+        invoke(playergun.muzzle_flash.disable, delay=.05)
+        invoke(setattr, playergun, 'on_cooldown', False, delay=0.3)
+
+        
+    
+
+def enemy_take_damage(damage):
+    damage_text.text = f'-{damage}'
+    damage_text.enabled = True
+    damage_text.position = enemy.world_position + (0, 1, 0)  # Adjust the text position
+    invoke(damage_text.disable, delay=1)
+
+
+
 #main update for shooting input, timer
 def update():
     if held_keys['left mouse']:
@@ -72,28 +93,37 @@ def input(key):
     if key == 'escape':
         quit()
 
-#skjuta
-def shoot():
-    if not playergun.on_cooldown:
-        playergun.on_cooldown = True
-        playergun.muzzle_flash.enabled=True
-        invoke(playergun.muzzle_flash.disable, delay=.05)
-        invoke(setattr, playergun, 'on_cooldown', False, delay=0.3)
+
 
 class Enemy(Entity):
     def __init__(self, **kwargs):
         
-        super().__init__(model='Assets/ToughGuy.obj', scale_y=2,scale_x=2,scale_z=2, origin_y=-0.75, color=color.light_gray, collider='circle',shader=basic_lighting_shader, enemyspeed=4, **kwargs)
+        super().__init__(model='Assets/ToughGuy.obj', scale_y=2,scale_x=2,scale_z=2, origin_y=-0.75, color=color.light_gray, collider='circle',shader=basic_lighting_shader, enemyspeed=2, **kwargs)
         self.color = color.red
+        self.health_bar = Entity(parent=self, y=1.2, model='cube', color=color.red, world_scale=(1.5,.1,.1))
+        self.max_hp = 100
+        self.hp = self.max_hp
+
+
+
     def update(self):
+
+        dist = distance_xz(player.position, self.position)
+        if dist > 40:
+            return
+
         self.look_at_2d(player, "y")
         distance_to_player = distance_xz(self.position, player.position)
         if distance_to_player >= 2.5:
             self.position += self.forward * time.dt * self.enemyspeed
         else:
             print_on_screen("hejdå", position=(0,0), scale=5, duration=1)
-        
-        
+
+        self.health_bar.alpha = max(0, self.health_bar.alpha - time.dt)
+        hit_info = raycast(self.world_position + Vec3(0,1,0), self.forward, 30, ignore=(self,))
+        if hit_info.entity == player:
+            if dist > 2:
+                self.position += self.forward * time.dt * 5
         
 
 enemy = Enemy()
@@ -110,7 +140,7 @@ enemy = Enemy()
 
 
 
-#enemies = [Enemy(x=x*3) for x in range(4)] #spawnar 4 enemies
+
 #lighting
 sun = DirectionalLight()
 sun.look_at(Vec3(1,-1,-1))
