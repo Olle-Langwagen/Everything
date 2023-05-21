@@ -25,14 +25,34 @@ fetch('https://us.battle.net/oauth/token', {
       return data.realms;
     };
 
-    // Function to convert realm name to realm ID
     const getRealmId = async (region, realmName) => {
-      const realms = await fetchRealmList(region);
-      const realm = realms.find(r => r.name.toLowerCase() === realmName.toLowerCase());
-      if (realm) {
-        return realm.id;
+      const realmListUrl = `https://${region}.api.blizzard.com/data/wow/realm/index?namespace=dynamic-${region}&locale=en_US&access_token=${accessToken}`;
+      const response = await fetch(realmListUrl);
+      const data = await response.json();
+    
+      const realms = data.realms;
+      const connectedRealms = data.connected_realms;
+    
+      // Search for standalone realm by name
+      const standaloneRealm = realms.find(r => r.name.toLowerCase() === realmName.toLowerCase());
+      if (standaloneRealm) {
+        return standaloneRealm.id;
       }
-      return null;
+    
+      // Search for connected realm by name
+      for (const connectedRealm of connectedRealms) {
+        const connectedRealmUrl = connectedRealm.href;
+        const connectedRealmResponse = await fetch(connectedRealmUrl);
+        const connectedRealmData = await connectedRealmResponse.json();
+    
+        const connectedRealmsList = connectedRealmData.connected_realms;
+        const connectedRealmMatch = connectedRealmsList.find(r => r.name.toLowerCase() === realmName.toLowerCase());
+        if (connectedRealmMatch) {
+          return connectedRealmMatch.id;
+        }
+      }
+    
+      return null; // Realm not found
     };
 
     // Function to convert item name to item ID
@@ -63,12 +83,33 @@ fetch('https://us.battle.net/oauth/token', {
     };
 
 
+    // Function to sort auctions by price
+    const sortAuctions = (auctions, sortBy) => {
+      return auctions.sort((a, b) => {
+        if (sortBy === 'lowest') {
+          return a.buyout - b.buyout; // Sort by lowest price
+        } else if (sortBy === 'highest') {
+          return b.buyout - a.buyout; // Sort by highest price
+        }
+        return 0; // Default case (no sorting)
+      });
+    };
 
+    // Create a paragraph element for logs
+    const logParagraph = document.createElement('p');
+    const logContainer = document.getElementById('log-container');
+    logContainer.appendChild(logParagraph);
+
+    // Function to log messages
+    const logMessage = (message) => {
+      logParagraph.textContent += `${message}\n`;
+    };
     // Function to search for auctions based on item name, realm, and region
     const searchAuctions = async () => {
       // Clear the previous auction results
       const container = document.getElementById('auctions-container');
       container.innerHTML = '';
+      logParagraph.textContent = '';
 
       // Show the loading animation
       showLoadingAnimation();
@@ -76,7 +117,8 @@ fetch('https://us.battle.net/oauth/token', {
       // Get the item name from the search input
       const itemName = document.getElementById('search-input').value.trim();
       if (itemName === '') {
-        console.log('Please enter an item name');
+        logMessage('Please enter an item name');
+        removeLoadingAnimation();
         return;
       }
 
@@ -85,22 +127,28 @@ fetch('https://us.battle.net/oauth/token', {
       const region = document.getElementById('region-select').value;
 
       if (realmName === '') {
-        console.log('Please select a realm');
+        logMessage('Please select a realm');
+        removeLoadingAnimation();
         return;
       }
+
+      // Get the sort option from the dropdown menu
+      const sortOption = document.getElementById('sort-select').value;
 
       try {
         // Convert realm name to realm ID
         const realmId = await getRealmId(region, realmName);
         if (realmId === null) {
-          console.log('Realm not found');
+          logMessage('Realm not found');
+          removeLoadingAnimation();
           return;
         }
 
         // Convert item name to item ID
         const itemId = await getItemId(itemName);
         if (itemId === null) {
-          console.log('Item not found');
+          logMessage('Item not found');
+          removeLoadingAnimation();
           return;
         }
 
@@ -108,16 +156,28 @@ fetch('https://us.battle.net/oauth/token', {
 
 
         // Make a request to the Blizzard API endpoint with the access token, realm ID, and item ID
-        const response = await fetch(
-          `https://${region}.api.blizzard.com/data/wow/connected-realm/${realmId}/auctions?namespace=dynamic-${region}&locale=en_US&access_token=${accessToken}`
-          );
+    const auctionsUrl = `https://${region}.api.blizzard.com/data/wow/connected-realm/${realmId}/auctions?namespace=dynamic-${region}&locale=en_US&access_token=${accessToken}`;
+    const response = await fetch(auctionsUrl);
+
+    if (response.status === 404) {
+      logMessage('No auctions found for the specified realm');
+      removeLoadingAnimation();
+      return;
+    }
         const data = await response.json();
         const auctions = data.auctions;
             // Filter auctions based on the searched item ID
     const filteredAuctions = auctions.filter(auction => auction.item.id === itemId);
 
+    // Sort the filtered auctions based on the selected sort option
+    const sortedAuctions = sortAuctions(filteredAuctions, sortOption);
+
+    // Sort the filtered auctions by buyout price
+
+    //filteredAuctions.sort((a, b) => a.buyout - b.buyout);
+
     // Display the filtered auctions in the console
-filteredAuctions.forEach(auction => {
+    sortedAuctions.forEach(auction => {
   const auctionDiv = document.createElement('div');
   auctionDiv.className = 'auction';
 
@@ -189,16 +249,17 @@ filteredAuctions.forEach(auction => {
 });
 removeLoadingAnimation();
 
-
+    // Wowhead tooltip
     window.onload = function() {
       WH.Tooltip.init();
     }
   } catch (error) {
-    console.error('Error:', error);
+    logMessage(`Error: ${error}`);
+    removeLoadingAnimation();
   }
 };
 
-// Event listener for the search button
+// Filter knapp
 document.getElementById('search-button').addEventListener('click', searchAuctions);
 
 // Function to populate the realm select input with realm names
