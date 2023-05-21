@@ -1,4 +1,3 @@
-
 const CLIENT_ID = 'fb766b47b70a44018d9ef888f284d5bf';
 const CLIENT_SECRET = 'svU5ftd1jUO9eVe226zbZi37DHzvHNYf';
 

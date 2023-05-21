@@ -32,21 +32,33 @@ body{
 
 }
 
+
+/*Token*/
+#token-container{
+  display: flex;
+  flex-direction: column;
+  margin-left: 4rem;
+}
 .token-box {
   display: inline-block;
+  width: 8rem;
+  height: 2rem;
   background-color: #f2f2f2;
-  padding: 10px;
+  padding: 1.5rem;
   border-radius: 5px;
+  margin-top: 1rem;
 }
 
 .token-region {
   color: red;
   font-weight: bold;
+  
 }
 
 .token-price {
   color: black;
   font-weight: bold;
+  font-size: 1.5rem;
 }
 .nav-wrapper{
   margin-top: -2rem;
