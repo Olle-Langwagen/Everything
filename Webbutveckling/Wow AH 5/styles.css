@@ -283,9 +283,17 @@ body{
   background-color: #555555;
 }
 
+/*Last updated*/
+#last-updated {
+  display: none;
+}
+#token-timestamp{
+  font-size: 1.2rem;
+}
+
 /*Footer*/
 footer {
-  color: #ff0000;
+  color: #ffffff;
   text-align: center;
 }
 

@@ -104,6 +104,11 @@ fetch('https://us.battle.net/oauth/token', {
     const logMessage = (message) => {
       logParagraph.textContent += `${message}\n`;
     };
+
+
+
+
+    //Main funktion
     // Function to search for auctions based on item name, realm, and region
     const searchAuctions = async () => {
       // Clear the previous auction results
@@ -172,91 +177,104 @@ fetch('https://us.battle.net/oauth/token', {
     // Sort the filtered auctions based on the selected sort option
     const sortedAuctions = sortAuctions(filteredAuctions, sortOption);
 
+    // Retrieve the last updated timestamp from the response headers
+    const lastUpdatedHeader = response.headers.get('last-modified');
+    console.log(lastUpdatedHeader);
+    const lastUpdatedTimestamp = new Date(lastUpdatedHeader).toLocaleString();
+
     // Sort the filtered auctions by buyout price
 
     //filteredAuctions.sort((a, b) => a.buyout - b.buyout);
 
     // Display the filtered auctions in the console
     sortedAuctions.forEach(auction => {
-  const auctionDiv = document.createElement('div');
-  auctionDiv.className = 'auction';
+      const auctionDiv = document.createElement('div');
+      auctionDiv.className = 'auction';
 
-  const priceDiv = document.createElement('div');
-  priceDiv.className = 'price';
-  const priceText = document.createTextNode((auction.buyout / auction.quantity / 10000).toFixed(2));
-  const goldText = document.createElement('span');
-  goldText.className = 'goldText';
-  goldText.innerHTML = 'g';
-  priceDiv.appendChild(priceText);
-  priceDiv.appendChild(goldText);
-  auctionDiv.appendChild(priceDiv);
+      const priceDiv = document.createElement('div');
+      priceDiv.className = 'price';
+      const priceText = document.createTextNode((auction.buyout / auction.quantity / 10000).toFixed(2));
+      const goldText = document.createElement('span');
+      goldText.className = 'goldText';
+      goldText.innerHTML = 'g';
+      priceDiv.appendChild(priceText);
+      priceDiv.appendChild(goldText);
+      auctionDiv.appendChild(priceDiv);
 
-  const itemDiv = document.createElement('div');
-  itemDiv.className = 'item';
-  const imgDiv = document.createElement('div');
-  imgDiv.className = 'img';
-  const img = document.createElement('img');
+      const itemDiv = document.createElement('div');
+      itemDiv.className = 'item';
+      const imgDiv = document.createElement('div');
+      imgDiv.className = 'img';
+      const img = document.createElement('img');
 
-  const itemMediaUrl = `https://us.api.blizzard.com/data/wow/media/item/${auction.item.id}?namespace=static-us&locale=en_US&access_token=${accessToken}`;
-  fetch(itemMediaUrl)
-    .then(response => response.json())
-    .then(mediaData => {
-      const asset = mediaData.assets.find(a => a.key === 'icon');
-      if (asset) {
-        img.src = asset.value;
-      }
-    })
-    .catch(error => {
-      console.error(error);
-      img.src = 'https://dummyimage.com/56x56/000/fff.png&text=No+Image';
+      const itemMediaUrl = `https://us.api.blizzard.com/data/wow/media/item/${auction.item.id}?namespace=static-us&locale=en_US&access_token=${accessToken}`;
+      fetch(itemMediaUrl)
+        .then(response => response.json())
+        .then(mediaData => {
+          const asset = mediaData.assets.find(a => a.key === 'icon');
+          if (asset) {
+            img.src = asset.value;
+          }
+        })
+        .catch(error => {
+          console.error(error);
+          img.src = 'https://dummyimage.com/56x56/000/fff.png&text=No+Image';
+        });
+      imgDiv.appendChild(img);
+      itemDiv.appendChild(imgDiv);
+
+      const nameDiv = document.createElement('div');
+      nameDiv.className = 'name';
+      const itemNameLink = document.createElement('a');
+      itemNameLink.href = `https://www.wowhead.com/item=${auction.item.id}`;
+      itemNameLink.className = 'wowhead';
+      itemNameLink.setAttribute('data-wowhead', `item=${auction.item.id}`);
+
+      // Fetch item name using the item ID
+      fetch(
+        `https://us.api.blizzard.com/data/wow/item/${auction.item.id}?namespace=static-us&locale=en_US&access_token=${accessToken}`
+      )
+        .then(response => response.json())
+        .then(itemData => {
+          itemNameLink.textContent = itemData.name || 'Unknown Item';
+        })
+        .catch(error => {
+          console.error(error);
+          itemNameLink.textContent = 'Unknown Item';
+        });
+      nameDiv.appendChild(itemNameLink);
+      itemDiv.appendChild(nameDiv);
+      auctionDiv.appendChild(itemDiv);
+
+      const quantityDiv = document.createElement('div');
+      quantityDiv.className = 'quantity';
+      const quantityText = document.createTextNode(auction.quantity || 1);
+      quantityDiv.appendChild(quantityText);
+      auctionDiv.appendChild(quantityDiv);
+
+      const container = document.getElementById('auctions-container');
+      container.appendChild(auctionDiv);
+
+      
     });
-  imgDiv.appendChild(img);
-  itemDiv.appendChild(imgDiv);
 
-  const nameDiv = document.createElement('div');
-  nameDiv.className = 'name';
-  const itemNameLink = document.createElement('a');
-  itemNameLink.href = `https://www.wowhead.com/item=${auction.item.id}`;
-  itemNameLink.className = 'wowhead';
-  itemNameLink.setAttribute('data-wowhead', `item=${auction.item.id}`);
+    // Set the last updated timestamp
+    const lastUpdatedElement = document.getElementById('last-updated-timestamp');
+    const lastUpdatedParapgraph = document.getElementById('last-updated');
+    lastUpdatedParapgraph.style.display = 'block';
+    lastUpdatedElement.textContent = lastUpdatedTimestamp;
 
-  // Fetch item name using the item ID
-  fetch(
-    `https://us.api.blizzard.com/data/wow/item/${auction.item.id}?namespace=static-us&locale=en_US&access_token=${accessToken}`
-  )
-    .then(response => response.json())
-    .then(itemData => {
-      itemNameLink.textContent = itemData.name || 'Unknown Item';
-    })
-    .catch(error => {
-      console.error(error);
-      itemNameLink.textContent = 'Unknown Item';
-    });
-  nameDiv.appendChild(itemNameLink);
-  itemDiv.appendChild(nameDiv);
-  auctionDiv.appendChild(itemDiv);
 
-  const quantityDiv = document.createElement('div');
-  quantityDiv.className = 'quantity';
-  const quantityText = document.createTextNode(auction.quantity || 1);
-  quantityDiv.appendChild(quantityText);
-  auctionDiv.appendChild(quantityDiv);
-
-  const container = document.getElementById('auctions-container');
-  container.appendChild(auctionDiv);
-
-  
-});
-removeLoadingAnimation();
-
-    // Wowhead tooltip
-    window.onload = function() {
-      WH.Tooltip.init();
-    }
-  } catch (error) {
-    logMessage(`Error: ${error}`);
     removeLoadingAnimation();
-  }
+
+        // Wowhead tooltip
+        window.onload = function() {
+          WH.Tooltip.init();
+        }
+      } catch (error) {
+        logMessage(`Error: ${error}`);
+        removeLoadingAnimation();
+      }
 };
 
 // Filter knapp
