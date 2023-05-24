@@ -11,30 +11,39 @@ fetch('https://us.battle.net/oauth/token', {
     const accessToken = data.access_token;
 
     function displayTokenPrices() {
-        // API endpoints
+        //API endpoints
         const usApiUrl = `https://us.api.blizzard.com/data/wow/token/index?namespace=dynamic-us&locale=en_US&access_token=${accessToken}`;
         const euApiUrl = `https://eu.api.blizzard.com/data/wow/token/index?namespace=dynamic-eu&locale=en_EU&access_token=${accessToken}`;
+
+        
     
-        // Fetch token prices for US region
+        //Token priser för US
         fetch(usApiUrl)
   .then(response => response.json())
   .then(data => {
     const usPrice = Math.floor(data.price / 10000);
 
-    // Display US token price on your website
+    //Displaya US priser
     document.getElementById('us-price').innerText = `${usPrice}g`;
+
+
+
+    const timestamp = new Date(data.last_updated_timestamp).toLocaleString();
+
+    const timestampElement = document.getElementById('token-timestamp');
+    timestampElement.textContent = timestamp;
   })
   .catch(error => {
     console.log('Error fetching US token price:', error);
   });
 
-// Fetch token prices for EU region
+//Token priser för Eu
 fetch(euApiUrl)
   .then(response => response.json())
   .then(data => {
     const euPrice = Math.floor(data.price / 10000);
 
-    // Display EU token price on your website
+    //Displaya EU priser
     document.getElementById('eu-price').innerText = `${euPrice}g`;
   })
   .catch(error => {
