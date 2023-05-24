@@ -1,8 +1,9 @@
 from ursina import *
 from ursina.prefabs.first_person_controller import FirstPersonController
 from ursina.shaders import basic_lighting_shader
-from ursina.prefabs.health_bar import HealthBar
 
+def openScoreboard():
+    pass
 #fullscreen
 window.size = window.fullscreen_size
 window.position = Vec2(0, 0)
@@ -20,7 +21,15 @@ pickup.visible = False
 playergun = Entity(model="cube", position=(0.25,-0.25,1), parent=camera, scale=(0.1,0.1,1), origin_z=0.5, on_cooldown=False, color=color.light_gray,shader=basic_lighting_shader)
 playergun.muzzle_flash = Entity(parent=playergun, z=1, y=-2, x=2, world_scale=.3, model='quad', color=color.yellow, enabled=False)
 gun_damage = 10
-damage_text = Text(text='dm', position=(0, 0))
+damage_dealt = 0
+damage_text = Text(text='0', position=(0, 0))
+
+
+shootables_parent = Entity()
+mouse.traverse_target = shootables_parent
+#Buttons for the pause menu
+quit_button = Button(text="Quit", on_click=application.quit, position=(0,0.4), scale=(0.1,0.05), color=color.red, ignore_paused=True, enabled=False)
+scoreboard_button = Button(text="Scoreboard", on_click=openScoreboard, position=(0,0.3), scale=(0.2,0.05), color=color.green, ignore_paused=True, enabled=False)
 #obstacles and ground
 ground = Entity(model='plane', collider='box', scale=64, texture='Assets/pexels-stefwithanf-3580088-1920x1080-25fps.mp4',shader=basic_lighting_shader)
 for i in range(10):
@@ -40,22 +49,20 @@ pickup_text = Text(text='Pickup in: ', position=(-0.76,0.47))
 
 #skjuta
 def shoot():
+    global damage_dealt, gun_damage
     if not playergun.on_cooldown:
         playergun.on_cooldown = True
         playergun.muzzle_flash.enabled = True
         invoke(playergun.muzzle_flash.disable, delay=.05)
         invoke(setattr, playergun, 'on_cooldown', False, delay=0.3)
+        #If the player is looking at an enemy, the enemy will take damage
+        if mouse.hovered_entity == enemy:
+            damage_dealt += gun_damage
+            damage_text.text = damage_dealt
+            enemy.blink(color.white, duration=.1)
+
 
         
-    
-
-def enemy_take_damage(damage):
-    damage_text.text = f'-{damage}'
-    damage_text.enabled = True
-    damage_text.position = enemy.world_position + (0, 1, 0)  # Adjust the text position
-    invoke(damage_text.disable, delay=1)
-
-
 
 #main update for shooting input, timer
 def update():
@@ -94,13 +101,34 @@ def input(key):
         quit()
 
 
+    
+
+def pause(key):
+    #Tab will be used as a pause button, it will pause the enemy and the player, and unlock the mouse so you can access a menu
+    if key =="tab":
+        editor_camera.enabled = not editor_camera.enabled
+
+        player.visible_self = editor_camera.enabled
+        player.cursor.enabled = not editor_camera.enabled
+        playergun.enabled = not editor_camera.enabled
+        mouse.locked = not editor_camera.enabled
+        editor_camera.position = player.position
+
+        application.paused = editor_camera.enabled
+
+        #enable all the menu/pause buttons
+        quit_button.enabled = editor_camera.enabled
+        scoreboard_button.enabled = editor_camera.enabled
+
+pause_handler = Entity(ignore_paused=True, input=pause)
+
+
 
 class Enemy(Entity):
     def __init__(self, **kwargs):
         
-        super().__init__(model='Assets/ToughGuy.obj', scale_y=2,scale_x=2,scale_z=2, origin_y=-0.75, color=color.light_gray, collider='circle',shader=basic_lighting_shader, enemyspeed=2, **kwargs)
+        super().__init__(parent=shootables_parent, model='Assets/ToughGuy.obj', scale_y=2,scale_x=2,scale_z=2, origin_y=-0.75, color=color.light_gray, collider='box',shader=basic_lighting_shader, enemyspeed=2, **kwargs)
         self.color = color.red
-        self.health_bar = Entity(parent=self, y=1.2, model='cube', color=color.red, world_scale=(1.5,.1,.1))
         self.max_hp = 100
         self.hp = self.max_hp
 
@@ -119,7 +147,7 @@ class Enemy(Entity):
         else:
             print_on_screen("hejdå", position=(0,0), scale=5, duration=1)
 
-        self.health_bar.alpha = max(0, self.health_bar.alpha - time.dt)
+
         hit_info = raycast(self.world_position + Vec3(0,1,0), self.forward, 30, ignore=(self,))
         if hit_info.entity == player:
             if dist > 2:
