@@ -1,0 +1,38 @@
+html{
+    height: 100%;
+}
+body{
+    background-color: aquamarine;
+    margin: 0;
+}
+#rubriker{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+}
+#länkar{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 50px;
+}
+
+.box{
+    display: flex;
+    justify-content: center;
+    height: 100px;
+    width: 300px;
+    background-color: #ca2525;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 0px #000000;
+    font-size: 30px;
+    margin-top: 10px;
+}
+a{
+    text-decoration: none;
+    color: white;
+}

@@ -1,0 +1,36 @@
+body{
+    padding-left: 30px;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+li a {
+    display: block;
+    color: #000;
+    padding: 8px 16px;
+    text-decoration: none;
+  }
+
+@media only screen and (max-width: 1024px) and (min-width: 480px) {
+    body{
+        background-color: blue;
+    }
+    h1{
+        color: white;
+    }
+
+    
+}
+
+@media only screen and (max-width: 480px) {
+    body{
+        background-color: yellow;
+    }
+    h1{
+        color: white;
+    }
+}
