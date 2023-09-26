@@ -9,18 +9,22 @@ window.position = Vec2(0, 0)
 
 #app
 app = Ursina()
-
+application.paused = True
 def start_game():
     player.name = name_input_field.text
     menu.enabled = False
     player.enabled = True
     enemy.enabled = True
     mouse.locked = True
+    application.paused = False
+    title.enabled = False
+    name_input_field.enabled = False
+    start_button.enabled = False
 
 menu = Entity(enabled=True)
-title = Text(text="FPS Game", origin=(0, 0.5), scale=2, color=color.white, parent=menu)
-name_input_field = InputField(parent=menu, position=(0, 0.1), text="Enter your name")
-start_button = Button(text="Start", parent=menu, position=(0, -0.2), scale=(0.2, 0.1), color=color.green, on_click=start_game)
+title = Text(text="FPS Game", origin=(0, -3), scale=5, color=color.white)
+name_input_field = InputField(position=(0, -0.1), text="Enter your name")
+start_button = Button(text="Start", position=(0, -0.2), scale=(0.2, 0.1), color=color.green, on_click=start_game)
 
 def write_scoreboard(name, damage_dealt):
 
@@ -52,20 +56,6 @@ def open_scoreboard():
 def close_scoreboard():
     scoreboard_panel.enabled = False
 
-def on_pause():
-    scoreboard_button.enabled = True
-
-def on_resume():
-    scoreboard_button.enabled = False
-
-def on_enable():
-    player.enabled = False
-    mouse.locked = False
-    invoke(setattr, player, 'enabled', True, delay=1)
-    invoke(on_pause, delay=0.1)
-
-def on_disable():
-    mouse.locked = True
 
 def on_die():
     global damage_dealt
@@ -83,18 +73,55 @@ def on_die():
 
 
 #player & camera
+
 editor_camera = EditorCamera(enabled=False, ignore_paused=True)
-player = FirstPersonController(model='cube', position=(20,0,0), z=-10, color=color.light_gray, origin_y=-0.5, speed=8, has_pickup=False)
-player.name = 'Player'
+class Player(FirstPersonController):
+    def __init__(self, **kwargs):
+        super().__init__(model='cube', position=(20,0,0), z=-10, color=color.light_gray, origin_y=-0.5, speed=8, gun_damage=10, **kwargs)
+        self.name = 'Player'
+
+    def on_trigger_enter(self, other):
+        if isinstance(other, Pickup):
+            # Check if the player is within a certain distance of the pickup
+            if distance(self.position, other.position) < 2:
+                # Call the on_pickup method of the pickup
+                other.on_pickup()
+player = Player()
+
 player.on_die = on_die
 
-pickup = Entity(model='sphere', position=(1,.5,3))
-pickup.visible = False
+player.enabled = False
+
+
+
+class Pickup(Entity):
+    def __init__(self, **kwargs):
+        super().__init__(parent=scene, model='cube', texture='UrsinaFPS\Assets\health_pack.png', scale=0.5, **kwargs)
+        self.pickup_type = random.choice(['damage', 'speed'])
+
+    def on_pickup(self):
+        if distance(self.position, player.position) < 2:
+            if self.pickup_type == 'damage':
+                player.gun_damage += 1
+                print('Picked up damage boost!')
+            elif self.pickup_type == 'speed':
+                player.speed += 1
+                print('Picked up speed boost!')
+            self.disable()
+
+def spawn_pickup():
+    pickup = Pickup(position=(random.uniform(-20, 20), 0.5, random.uniform(-20, 20)))
+    invoke(spawn_pickup, delay=5)
+
+# Call the spawn_pickup function every fifteen seconds
+invoke(spawn_pickup, delay=5)
+
+
 
 #gun
 playergun = Entity(model="cube", position=(0.25,-0.25,1), parent=camera, scale=(0.1,0.1,1), origin_z=0.5, on_cooldown=False, color=color.light_gray,shader=basic_lighting_shader)
 playergun.muzzle_flash = Entity(parent=playergun, z=1, y=-2, x=2, world_scale=.3, model='quad', color=color.yellow, enabled=False)
-gun_damage = 10
+#variable for the damage dealt that will be used in the scoreboard
 damage_dealt = 0
 damage_text = Text(text='0', position=(0, 0))
 
@@ -130,7 +157,7 @@ pickup_text = Text(text='Pickup in: ', position=(-0.76,0.47))
 
 #skjuta
 def shoot():
-    global damage_dealt, gun_damage
+    global damage_dealt
     if not playergun.on_cooldown:
         playergun.on_cooldown = True
         playergun.muzzle_flash.enabled = True
@@ -138,12 +165,9 @@ def shoot():
         invoke(setattr, playergun, 'on_cooldown', False, delay=0.3)
         #If the player is looking at an enemy, the enemy will take damage
         if mouse.hovered_entity == enemy:
-            damage_dealt += gun_damage
+            damage_dealt += player.gun_damage
             damage_text.text = damage_dealt
             enemy.blink(color.white, duration=.1)
-
-
-        
 
 #main update for shooting input, timer
 def update():
@@ -154,35 +178,14 @@ def update():
     timer.t += time.dt
     timer.text = str(round(timer.t, 2))
     pickup_timer.text = str(round(-timer.t+10, 2))
-
-    if -timer.t+10 < 0:
-        pickup.visible = True
-        pickup_timer.visible = False
-        pickup_text.text = "Pickup has Spawned"
-    #if timer.t > 10:
-        #pickup.visible = True
-
-    if not player.has_pickup and distance(player, pickup) < pickup.scale_x / 2:
-        print('pickup')
-
-        player.has_pickup  = True
-        pickup.animate_scale(0, duration=.1)
-        destroy(pickup, delay=.1)
-        player.speed = player.speed * 2
-        pickup_text.visible = False
+    ray = raycast(player.position, player.forward, distance=2, ignore=[player])
+    if ray.hit and isinstance(ray.entity, Pickup):
+        ray.entity.on_pickup()
     
-    
-
-
-    
-
 #enkelt sluta, kommer ändra sen
 def input(key):
     if key == 'escape':
         quit()
-
-
-    
 
 def pause(key):
     #Tab will be used as a pause button, it will pause the enemy and the player, and unlock the mouse so you can access a menu
@@ -200,6 +203,7 @@ def pause(key):
         #enable all the menu/pause buttons
         quit_button.enabled = editor_camera.enabled
         scoreboard_button.enabled = editor_camera.enabled
+        scoreboard_panel.enabled = editor_camera.enabled
 
 pause_handler = Entity(ignore_paused=True, input=pause)
 
@@ -210,15 +214,15 @@ class Enemy(Entity):
         
         super().__init__(parent=shootables_parent, model='Assets/ToughGuy.obj', scale_y=2,scale_x=2,scale_z=2, origin_y=-0.75, color=color.light_gray, collider='box',shader=basic_lighting_shader, enemyspeed=2, **kwargs)
         self.color = color.red
-        self.max_hp = 100
-        self.hp = self.max_hp
         self.has_written_to_csv = False
 
+    def increase_speed(self):
+        self.enemyspeed += 0.5
 
     def update(self):
 
         dist = distance_xz(player.position, self.position)
-        if dist > 40:
+        if dist > 80:
             return
 
         self.look_at_2d(player, "y")
@@ -236,29 +240,18 @@ class Enemy(Entity):
             if dist > 2:
                 self.position += self.forward * time.dt * 5
         
+#Increase enemy speed every 30 seconds
+def increase_enemy_speed():
+    enemy.increase_speed()
+    invoke(increase_enemy_speed, delay=1)
 
 enemy = Enemy()
-
-
-
-
-
-
-
-
-
-
-
-
-
+enemy.enabled = False
+invoke(increase_enemy_speed, delay=1)
 
 #lighting
 sun = DirectionalLight()
 sun.look_at(Vec3(1,-1,-1))
 Sky()
-
-
-
-
 
 app.run()
