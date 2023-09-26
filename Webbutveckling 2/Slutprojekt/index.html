@@ -1,130 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Idle Clicker Game</title>
-    <style>
-        /* Add your CSS styling here */
-        #game-container {
-            text-align: center;
-            margin-top: 100px;
-        }
-        #money-display {
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-        .factory-container {
-            margin: 20px;
-        }
-        .factory {
-            display: inline-block;
-            text-align: center;
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin: 10px;
-        }
-        .upgrade-button {
-            font-size: 16px;
-            padding: 5px 10px;
-            cursor: pointer;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Adventure Evolution</title>
 </head>
 <body>
-    <div id="game-container">
-        <h1>Idle Clicker Game</h1>
-        <p id="money-display">Money: $0</p>
-        <div class="factory-container">
-            <div class="factory" id="factory1">
-                <h3>Factory 1</h3>
-                <p>Level: <span id="factory1-level">0</span></p>
-                <p>Cost: $<span id="factory1-cost">10</span></p>
-                <button class="upgrade-button" id="upgrade-factory1">Upgrade</button>
-            </div>
-            <div class="factory" id="factory2">
-                <h3>Factory 2</h3>
-                <p>Level: <span id="factory2-level">0</span></p>
-                <p>Cost: $<span id="factory2-cost">50</span></p>
-                <button class="upgrade-button" id="upgrade-factory2" disabled>Locked</button>
-            </div>
-            <div class="factory" id="factory3">
-                <h3>Factory 3</h3>
-                <p>Level: <span id="factory3-level">0</span></p>
-                <p>Cost: $<span id="factory3-cost">100</span></p>
-                <button class="upgrade-button" id="upgrade-factory3" disabled>Locked</button>
-            </div>
+    <div class="container">
+        <h1>Adventure Evolution</h1>
+        <p>Current Resources: <span id="resources">0</span></p>
+        <button id="clickButton">Click Me</button>
+        <div id="businesses">
+            <!-- Business information will go here -->
         </div>
     </div>
 
-    <script>
-        // JavaScript logic
-        let money = 0;
-        let factory1Level = 0;
-        let factory2Level = 0;
-        let factory3Level = 0;
-
-        // Function to update the money display
-        function updateMoneyDisplay() {
-            document.getElementById("money-display").textContent = `Money: $${money}`;
-        }
-
-        // Function to update factory UI elements
-        function updateFactoryUI(factoryId, level, cost) {
-            document.getElementById(`${factoryId}-level`).textContent = level;
-            document.getElementById(`${factoryId}-cost`).textContent = cost;
-        }
-
-        // Function to check if a factory is affordable
-        function isFactoryAffordable(cost) {
-            return money >= cost;
-        }
-
-        // Function to upgrade a factory
-        function upgradeFactory(factoryId, cost, incomeIncrease) {
-            if (isFactoryAffordable(cost)) {
-                money -= cost;
-                window[`${factoryId}Level`] += 1;
-                updateMoneyDisplay();
-                updateFactoryUI(factoryId, window[`${factoryId}Level`], cost);
-                // Increase income based on factory level
-                income += incomeIncrease;
-            }
-        }
-
-        // Function to unlock factories based on available money
-        function unlockFactories() {
-            if (money >= 50 && factory2Level === 0) {
-                document.getElementById("upgrade-factory2").removeAttribute("disabled");
-                document.getElementById("upgrade-factory2").textContent = "Upgrade";
-            }
-            if (money >= 100 && factory3Level === 0) {
-                document.getElementById("upgrade-factory3").removeAttribute("disabled");
-                document.getElementById("upgrade-factory3").textContent = "Upgrade";
-            }
-        }
-
-        // Click event handler for Factory 1
-        document.getElementById("upgrade-factory1").addEventListener("click", function () {
-            upgradeFactory("factory1", 10, 1);
-            unlockFactories();
-        });
-
-        // Click event handler for Factory 2
-        document.getElementById("upgrade-factory2").addEventListener("click", function () {
-            upgradeFactory("factory2", 50, 5);
-        });
-
-        // Click event handler for Factory 3
-        document.getElementById("upgrade-factory3").addEventListener("click", function () {
-            upgradeFactory("factory3", 100, 10);
-        });
-
-        // Start a simple automatic income (every 5 seconds in this example)
-        let income = 1;
-        setInterval(function () {
-            money += income;
-            updateMoneyDisplay();
-            unlockFactories();
-        }, 500); // 5000 milliseconds = 5 seconds
-    </script>
+    <script src="main.js"></script>
 </body>
 </html>
