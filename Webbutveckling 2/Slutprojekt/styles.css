@@ -1,39 +1,43 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
+    background-color: #9c6464;
     text-align: center;
 }
 
-.container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+.flex-container {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
 }
 
-h1 {
-    color: #333;
-}
+.click-area, .businesses, .upgrades {
+    flex: 1;
+    padding: 10px;
+    box-sizing: border-box;
+} 
 
-button {
-    padding: 10px 20px;
-    background-color: #007BFF;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
+#clickImage {
     cursor: pointer;
-    font-size: 16px;
-}
-
-#businesses {
-    margin-top: 20px;
+    max-width: 100%;
+    height: auto;
 }
 
 .business {
-    border: 2px solid #007BFF; /* Lägg till en ram med blå färg */
+    border: 2px solid #007BFF;
     padding: 10px;
     margin-bottom: 10px;
-    border-radius: 5px; /* Runda hörnen av rutan */
+    border-radius: 5px;
+}
+
+#resources {
+    margin-bottom: 40px;
+    font-size: 1.5rem;
+    color: #333;
+}
+
+
+@media (max-width: 768px) {
+    .flex-container {
+        flex-direction: column;
+    }
 }
