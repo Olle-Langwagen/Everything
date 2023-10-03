@@ -1,22 +1,17 @@
-// Initial resource count
 let resources = 0;
-
-// Click event handler
+let currentRank = 0;
 document.getElementById("clickButton").addEventListener("click", function () {
-    // Increase resources when clicked
     resources += 1;
     updateResources();
 });
 
-// Function to update the resource count in the HTML
 function updateResources() {
     const resourceElement = document.getElementById("resources");
-    resourceElement.textContent = parseInt(resources); // Convert to integer
+    resourceElement.textContent = parseInt(resources);
 }
 
 function updateIncome() {
     let totalIncome = 0;
-    // Loop through all businesses and calculate total income
     for (const business of businesses) {
         totalIncome += business.income * business.level;
     }
@@ -24,22 +19,32 @@ function updateIncome() {
     updateResources();
 }
 
-// Business example (you can expand this for more businesses)
+function prestigeToNextRank() {
+    if (resources >= 10) {
+        alert("You have reached the next rank!");
+        resources = 0;
+        currentRank += 1;
+        const Rankelement = document.getElementById("currentRank");
+        Rankelement.textContent = currentRank;
+        updateResources();
+    }
+}
+
 class Business {
     constructor(name, cost, income) {
         this.name = name;
         this.cost = cost;
         this.income = income;
         this.level = 0;
-        this.element = null; // Reference to the HTML element
+        this.element = null;
     }
 
     purchase() {
         if (resources >= this.cost) {
             resources -= this.cost;
             this.level += 1;
-            this.cost *= 2; // You can adjust the cost increase logic
-            this.income *= 1.2; // You can adjust the income increase logic
+            this.cost *= 2;
+            this.income *= 1.2;
             updateResources();
             this.updateDisplay();
         }
@@ -47,16 +52,13 @@ class Business {
 
     updateDisplay() {
         if (!this.element) {
-            // If the HTML element doesn't exist, create it
             this.element = document.createElement("div");
-            this.element.classList.add("business"); // Lägg till .business-klassen
+            this.element.classList.add("business");
             document.getElementById("businesses").appendChild(this.element);
         }
 
-        // Calculate the income for this business based on its level
         const businessIncome = (this.income * this.level).toFixed(1);
 
-        // Update the business information
         this.element.innerHTML = `
             <p>${this.name} (Level ${this.level})</p>
             <p>Cost: ${this.cost} resources</p>
@@ -64,21 +66,25 @@ class Business {
             <button id="${this.name}Button">Purchase</button>
         `;
 
-        // Add click event for purchasing this business
         document.getElementById(`${this.name}Button`).addEventListener("click", () => {
             this.purchase();
         });
     }
 }
 
-// Create example businesses
+
+
 const primitiveFarm = new Business("Primitive Farm", 10, 1);
 primitiveFarm.updateDisplay();
 
 const Blacksmith = new Business("Blacksmith", 100, 10);
 Blacksmith.updateDisplay();
-// Create an array to store all businesses
-const businesses = [primitiveFarm, Blacksmith];
 
-// Set up an interval to update income every second (adjust the interval as needed)
-setInterval(updateIncome, 1000); // Income updates every second
+const ResarchFac = new Business("Reaserch Facility", 1000, 100);
+ResarchFac.updateDisplay();
+
+const businesses = [primitiveFarm, Blacksmith, ResarchFac];
+
+setInterval(updateIncome, 1000);
+
+setInterval(prestigeToNextRank, 1000);
