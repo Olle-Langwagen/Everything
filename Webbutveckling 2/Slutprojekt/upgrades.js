@@ -131,13 +131,27 @@ const doubleBlacksmithIncome2 = new Upgrade(
     }
 );
 
+const doubleResarchFacilityIncome = new Upgrade(
+    "Double Research Facility Income", 
+    500000, 
+    "Research Facility", 
+    2, 
+    (businessName) => {
+        const business = businesses.find(b => b.name === businessName);
+        if (business) {
+            business.income *= 2;
+            business.updateDisplay();
+        }
+    }
+);
+
 
 
 
 
 
 //Lägger till alla uppgraderingar i arrayen.
-upgrades.push(doubleFarmIncome, doubleFarmIncome2, doubleBlacksmithIncome, doubleBlacksmithIncome2);
+upgrades.push(doubleFarmIncome, doubleFarmIncome2, doubleBlacksmithIncome, doubleBlacksmithIncome2, doubleResarchFacilityIncome);
 
 
 
