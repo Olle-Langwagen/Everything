@@ -1,5 +1,6 @@
 // Startkapital
-let resources = 100000;
+let resources = 100000000;
+let incomeMultiplier = 1;
 
 //Klick
 document.getElementById("clickImage").addEventListener("click", function () {
@@ -7,21 +8,43 @@ document.getElementById("clickImage").addEventListener("click", function () {
     updateResources();
 });
 
+
+function getPlayerStats() {
+    let totalBusinesses = 0;
+    for (const business of businesses) {
+        totalBusinesses += business.level;
+    }
+    return {
+        money: resources,
+        businesses: totalBusinesses,
+        incomeMultiplier: 1 // This is a placeholder. Modify as needed.
+    };
+}
+
+
 //Uppdaterar resurser
 function updateResources() {
     const resourceElement = document.getElementById("resources");
     resourceInt = parseInt(resources);
     resourceElement.textContent = "Resources: " + resourceInt;
+
+    const playerStats = getPlayerStats();
+    checkForRankUp(playerStats);
 }
 
 function updateIncome() {
     let totalIncome = 0;
     // Loopar igenom verksamheterna och räknar ut totala inkomsten
     for (const business of businesses) {
-        totalIncome += business.income * business.level;
+        totalIncome += business.income * business.level * incomeMultiplier;
     }
     resources += totalIncome;
+
+    document.getElementById("totalIncome").textContent = "Total Income: " + totalIncome;
     updateResources();
+
+    const playerStats = getPlayerStats();
+    checkForRankUp(playerStats);
 }
 
 // Klass för verksamheter
@@ -43,6 +66,9 @@ class Business {
             updateResources();
             this.updateDisplay();
         }
+
+        const playerStats = getPlayerStats();
+        checkForRankUp(playerStats);
     }
 
     updateDisplay() {
@@ -73,13 +99,13 @@ class Business {
 
 
 // VERKSAMHETER //
-const primitiveFarm = new Business("Primitive Farm", 10, 1);
+const primitiveFarm = new Business("Primitive Farm", 10, 0.1);
 primitiveFarm.updateDisplay();
 
-const Blacksmith = new Business("Blacksmith", 100, 10);
+const Blacksmith = new Business("Blacksmith", 100, 1);
 Blacksmith.updateDisplay();
 
-const ResearchFacility = new Business("Research Facility", 1000, 100);
+const ResearchFacility = new Business("Research Facility", 1000, 10);
 ResearchFacility.updateDisplay();
 
 
