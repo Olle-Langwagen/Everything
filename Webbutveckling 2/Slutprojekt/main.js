@@ -9,6 +9,24 @@ document.getElementById("clickImage").addEventListener("click", function () {
 });
 
 
+function resetGame() {
+    // Reset resources
+    resources = 0;  // or whatever starting value you want
+
+    // Reset businesses
+    for (const business of businesses) {
+        business.level = 0;
+        // If you have initial costs and incomes defined somewhere, reset to those values.
+        // For now, I'm assuming you might have them as properties in the Business class.
+        business.cost = business.initialCost;
+        business.income = business.initialIncome;
+        business.updateDisplay();
+    }
+    updateResources();
+    updateIncome();
+}
+
+
 function getPlayerStats() {
     let totalBusinesses = 0;
     for (const business of businesses) {
@@ -55,6 +73,8 @@ class Business {
         this.income = income;
         this.level = 0;
         this.element = null;
+        this.initialIncome = income;
+        this.initialCost = cost;
     }
 
     purchase() {

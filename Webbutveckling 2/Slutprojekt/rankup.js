@@ -1,12 +1,12 @@
-// Rank structure:
+
 const ranks = [
     { name: "Beginner", criteria: { businesses: 0, money: 0 }, bonus: { incomeMultiplier: 1 } },
     { name: "Novice", criteria: { businesses: 10, money: 1000 }, bonus: { incomeMultiplier: 1.1 } },
     { name: "Pro", criteria: { businesses: 50, money: 10000 }, bonus: { incomeMultiplier: 1.25 } },
-    // ... add more ranks as needed
+
 ];
 
-let currentPlayerRankIndex = 0; // Assuming player starts at rank 0.
+let currentPlayerRankIndex = 0;
 
 function meetsCriteria(playerStats) {
     const nextRank = ranks[currentPlayerRankIndex + 1];
@@ -21,8 +21,10 @@ function rankUp(playerStats) {
     currentPlayerRankIndex++;
     const newRankBonus = ranks[currentPlayerRankIndex].bonus;
 
-    // Modify the bonuses to fit your game logic. For example:
     incomeMultiplier *= newRankBonus.incomeMultiplier;
+
+    resetGame();
+    resetUpgrades();
 
     return true;
 }
@@ -60,5 +62,7 @@ function onRankUpButtonClick() {
     }
 }
 
-// Initialize rank info on page load
+
+
+
 window.onload = displayRankInfo;

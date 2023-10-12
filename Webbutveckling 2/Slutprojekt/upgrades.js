@@ -57,7 +57,19 @@ class Upgrade {
 
 
 
+function resetUpgrades() {
+    for (const upgrade of upgrades) {
+        upgrade.purchased = false;
+        // If there are specific effects that need to be undone when resetting, you can do that here.
+        // For now, I assume just setting purchased to false is enough.
 
+        // Remove existing display if any
+        if (upgrade.element) {
+            upgrade.element.remove();
+            upgrade.element = null;
+        }
+    }
+}
 
 
 

@@ -9,13 +9,17 @@
 <body>
     <div class="header">
         <h1>Adventure Evolution</h1>
+        <div id="notification" style="display: none; position: fixed; bottom: 10px; right: 10px; padding: 10px; background-color: #ddd; border-radius: 5px;">Game saved!</div>
 
     </div>
     <div class="rank-info">
         <h2>Rank: <span id="currentRank"></span></h2>
         <p>Next Rank Criteria: <span id="nextRankCriteria"></span></p>
         <button id="rankUpButton" onclick="onRankUpButtonClick()" style="display: none;">Rank Up</button>
+        <button onclick="saveGame()">Save Game</button>
+        <button onclick="loadGame()">Load Game</button>
     </div>
+    
     <div class="flex-container">
         <div class="click-area">
             <p id="resources"></p>
@@ -27,6 +31,7 @@
             <!-- Business information will go here -->
         </div>
         <div class="upgrades" id="upgradesContainer">
+            <h3>Upgrades</h3>
             <!-- Upgrade information will go here -->
         </div>
     </div>
@@ -34,5 +39,6 @@
     <script src="main.js"></script>
     <script src="upgrades.js"></script>
     <script src="rankup.js"></script>
+    <script src="save-load.js"></script>
 </body>
 </html>
