@@ -60,26 +60,12 @@ class Upgrade {
 function resetUpgrades() {
     for (const upgrade of upgrades) {
         upgrade.purchased = false;
-        // If there are specific effects that need to be undone when resetting, you can do that here.
-        // For now, I assume just setting purchased to false is enough.
-
-        // Remove existing display if any
         if (upgrade.element) {
             upgrade.element.remove();
             upgrade.element = null;
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
 // UPGRADDERINGAR //
 
 
@@ -88,24 +74,11 @@ const upgrades = [];
 
 
 
-const doubleFarmIncome = new Upgrade(
-    "Double Farm Income", 
-    200, 
-    "Primitive Farm", 
-    5, 
-    (businessName) => {
-        const business = businesses.find(b => b.name === businessName);
-        if (business) {
-            business.income *= 2;
-            business.updateDisplay();
-        }
-    }
-);
-const doubleFarmIncome2 = new Upgrade(
-    "Double Farm Income", 
-    5000, 
-    "Primitive Farm", 
-    10, 
+const doublePrimordialSoupLabIncome = new Upgrade(
+    "Double Primordial Soup Lab Income",
+    200,
+    "Primordial Soup Lab",
+    5,
     (businessName) => {
         const business = businesses.find(b => b.name === businessName);
         if (business) {
@@ -115,11 +88,11 @@ const doubleFarmIncome2 = new Upgrade(
     }
 );
 
-const doubleBlacksmithIncome = new Upgrade(
-    "Double Blacksmith Income", 
-    5000, 
-    "Blacksmith", 
-    5, 
+const doubleStoneAgeToolWorkshopIncome = new Upgrade(
+    "Double Stone Age Tool Workshop Income",
+    1000,
+    "Stone Age Tool Workshop",
+    5,
     (businessName) => {
         const business = businesses.find(b => b.name === businessName);
         if (business) {
@@ -129,11 +102,11 @@ const doubleBlacksmithIncome = new Upgrade(
     }
 );
 
-const doubleBlacksmithIncome2 = new Upgrade(
-    "Double Blacksmith Income", 
-    50000, 
-    "Blacksmith", 
-    10, 
+const doubleAgriculturalRevolutionFarmIncome = new Upgrade(
+    "Double Agricultural Revolution Farm Income",
+    4000,
+    "Agricultural Revolution Farm",
+    5,
     (businessName) => {
         const business = businesses.find(b => b.name === businessName);
         if (business) {
@@ -143,11 +116,11 @@ const doubleBlacksmithIncome2 = new Upgrade(
     }
 );
 
-const doubleResarchFacilityIncome = new Upgrade(
-    "Double Research Facility Income", 
-    500000, 
-    "Research Facility", 
-    2, 
+const doubleAncientMaritimeVenturesIncome = new Upgrade(
+    "Double Ancient Maritime Ventures Income",
+    20000,
+    "Ancient Maritime Ventures",
+    5,
     (businessName) => {
         const business = businesses.find(b => b.name === businessName);
         if (business) {
@@ -156,6 +129,91 @@ const doubleResarchFacilityIncome = new Upgrade(
         }
     }
 );
+
+const doubleMedievalAlchemyShopIncome = new Upgrade(
+    "Double Medieval Alchemy Shop Income",
+    100000,
+    "Medieval Alchemy Shop",
+    5,
+    (businessName) => {
+        const business = businesses.find(b => b.name === businessName);
+        if (business) {
+            business.income *= 2;
+            business.updateDisplay();
+        }
+    }
+);
+
+const doubleRenaissanceInventorsWorkshopIncome = new Upgrade(
+    "Double Renaissance Inventor's Workshop Income",
+    500000,
+    "Renaissance Inventor's Workshop",
+    5,
+    (businessName) => {
+        const business = businesses.find(b => b.name === businessName);
+        if (business) {
+            business.income *= 2;
+            business.updateDisplay();
+        }
+    }
+);
+
+const doubleIndustrialAgeFactoryIncome = new Upgrade(
+    "Double Industrial Age Factory Income",
+    2500000,
+    "Industrial Age Factory",
+    5,
+    (businessName) => {
+        const business = businesses.find(b => b.name === businessName);
+        if (business) {
+            business.income *= 2;
+            business.updateDisplay();
+        }
+    }
+);
+
+const doubleModernTechStartUpIncome = new Upgrade(
+    "Double Modern Tech Start-Up Income",
+    12500000,
+    "Modern Tech Start-Up",
+    5,
+    (businessName) => {
+        const business = businesses.find(b => b.name === businessName);
+        if (business) {
+            business.income *= 2;
+            business.updateDisplay();
+        }
+    }
+);
+
+const doubleSpaceExplorationCompanyIncome = new Upgrade(
+    "Double Space Exploration Company Income",
+    62500000,
+    "Space Exploration Company",
+    5,
+    (businessName) => {
+        const business = businesses.find(b => b.name === businessName);
+        if (business) {
+            business.income *= 2;
+            business.updateDisplay();
+        }
+    }
+);
+
+const doubleIntergalacticTradeHubIncome = new Upgrade(
+    "Double Intergalactic Trade Hub Income",
+    312500000,
+    "Intergalactic Trade Hub",
+    5,
+    (businessName) => {
+        const business = businesses.find(b => b.name === businessName);
+        if (business) {
+            business.income *= 2;
+            business.updateDisplay();
+        }
+    }
+);
+
 
 
 
@@ -163,7 +221,8 @@ const doubleResarchFacilityIncome = new Upgrade(
 
 
 //Lägger till alla uppgraderingar i arrayen.
-upgrades.push(doubleFarmIncome, doubleFarmIncome2, doubleBlacksmithIncome, doubleBlacksmithIncome2, doubleResarchFacilityIncome);
+upgrades.push(doublePrimordialSoupLabIncome, doubleStoneAgeToolWorkshopIncome, doubleAgriculturalRevolutionFarmIncome, doubleAncientMaritimeVenturesIncome, doubleMedievalAlchemyShopIncome, doubleRenaissanceInventorsWorkshopIncome, doubleIndustrialAgeFactoryIncome, doubleModernTechStartUpIncome, doubleSpaceExplorationCompanyIncome, doubleIntergalacticTradeHubIncome);
+
 
 
 

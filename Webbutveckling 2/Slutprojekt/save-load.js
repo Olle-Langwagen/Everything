@@ -1,3 +1,5 @@
+//Mycket kopierat från tidigare projekt i webb 1
+
 window.saveGame = function() {
     const gameState = {
         resources: resources,
@@ -13,11 +15,14 @@ window.saveGame = function() {
     };
 
     localStorage.setItem('AEGameState', JSON.stringify(gameState));
+
+    //Chatgpt hjälpte med detta
     const notification = document.getElementById('notification');
     notification.style.display = 'block';
     setTimeout(() => {
         notification.style.display = 'none';
     }, 2000);
+    //Chatgpt hjälpte med detta
 }
 
 window.loadGame = function() {
