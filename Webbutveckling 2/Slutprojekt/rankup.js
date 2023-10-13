@@ -2,7 +2,9 @@
 const ranks = [
     { name: "Beginner", criteria: { businesses: 0, money: 0 }, bonus: { incomeMultiplier: 1 } },
     { name: "Novice", criteria: { businesses: 10, money: 1000 }, bonus: { incomeMultiplier: 1.1 } },
-    { name: "Pro", criteria: { businesses: 50, money: 10000 }, bonus: { incomeMultiplier: 1.25 } },
+    { name: "Pro", criteria: { businesses: 20, money: 10000 }, bonus: { incomeMultiplier: 1.25 } },
+    { name: "Warren Buffet", criteria: { businesses: 30, money: 50000 }, bonus: { incomeMultiplier: 1.5 } },
+    { name: "Elon Musk", criteria: { businesses: 50, money: 100000 }, bonus: { incomeMultiplier: 2 } },
 
 ];
 

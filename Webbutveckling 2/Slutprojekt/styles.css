@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    background-color: #bb7c7c;
     color: #333;
     text-align: center;
     margin: 0;
@@ -15,16 +15,16 @@ body {
 }
 
 .rank-info {
-    background-color: #e9e9e9;
+    background-color: rgb(255, 255, 255);
     padding: 20px;
     margin-top: 20px;
-    border: 1px solid #ddd;
+    border: 1px solid #3a3131;
     border-radius: 5px;
     box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
 }
 
 button {
-    background-color: #007BFF;
+    background-color: #27384a;
     color: #fff;
     border: none;
     padding: 10px 20px;
@@ -74,7 +74,7 @@ button:hover {
 }
 
 .business {
-    border: 2px solid #007BFF;
+    border: 2px solid #27384a;
     padding: 10px;
     margin-bottom: 10px;
     border-radius: 5px;

@@ -1,58 +1,62 @@
 // Startkapital
-let resources = 100000000;
+let resources = 1000000000000
 let incomeMultiplier = 1;
 
 const clickSound = new Audio('clicksound.mp3');
 
 //Klick
 document.getElementById("clickImage").addEventListener("click", function () {
-    resources += 1;
+    let totalIncome = 0;
+    // Loopar igenom verksamheterna och räknar ut totala inkomsten
+    for (const business of businesses) {
+        totalIncome += business.income * business.level * incomeMultiplier;
+    }
+
+
+    resources += (totalIncome/10)+1
+    console.log(totalIncome)
     clickSound.play();
     
     updateResources();
 });
-/*
+
 document.getElementById('clickImage').addEventListener('click', function(event) {
-    // Play the sound effect
 
+    let totalIncome = 0;
+    // Loopar igenom verksamheterna och räknar ut totala inkomsten
+    for (const business of businesses) {
+        totalIncome += business.income * business.level * incomeMultiplier;
+    }
+    const resourcesGenerated = (totalIncome/10)+1;
 
-    // Calculate resources generated (assuming a fixed value for this example, e.g., 10)
-    // In a real game, you'd probably have some logic to determine this value
-    const resourcesGenerated = 10;
-
-    // Create a new element to display the number of resources
     const resourceElement = document.createElement('div');
     resourceElement.innerText = `+${resourcesGenerated}`;
     resourceElement.style.position = 'absolute';
     resourceElement.style.left = `${event.pageX}px`;
     resourceElement.style.top = `${event.pageY}px`;
     resourceElement.style.fontSize = '1.2rem';
-    resourceElement.style.color = '#007BFF';
+    resourceElement.style.color = '#fff';
     resourceElement.style.transition = 'opacity 1s, transform 1s';
     resourceElement.style.pointerEvents = 'none';
     document.body.appendChild(resourceElement);
 
-    // After a short delay, animate the element to fade out and move upwards
     setTimeout(() => {
         resourceElement.style.opacity = '0';
         resourceElement.style.transform = 'translateY(-30px)';
         
-        // Remove the element from the DOM after the animation
         setTimeout(() => {
             document.body.removeChild(resourceElement);
         }, 1000);
     }, 100);
 });
-*/
+
 function resetGame() {
     // Reset resources
-    resources = 0;  // or whatever starting value you want
+    resources = 0;
 
     // Reset businesses
     for (const business of businesses) {
         business.level = 0;
-        // If you have initial costs and incomes defined somewhere, reset to those values.
-        // For now, I'm assuming you might have them as properties in the Business class.
         business.cost = business.initialCost;
         business.income = business.initialIncome;
         business.updateDisplay();
@@ -70,7 +74,7 @@ function getPlayerStats() {
     return {
         money: resources,
         businesses: totalBusinesses,
-        incomeMultiplier: 1 // This is a placeholder. Modify as needed.
+        incomeMultiplier: 1
     };
 }
 
@@ -99,6 +103,14 @@ function updateIncome() {
     const playerStats = getPlayerStats();
     checkForRankUp(playerStats);
 }
+
+/*
+function changeClickImage() {
+    if (resources >= 10) {
+        document.getElementById("clickImage").src = "images\akGXyehxuwO5.jpg";
+    }
+}
+*/
 
 // Klass för verksamheter
 class Business {
@@ -153,6 +165,8 @@ class Business {
 
 
 
+
+
 // VERKSAMHETER //
 const PrimordialSoupLab = new Business("Primordial Soup Lab", 10, 0.1);
 PrimordialSoupLab.updateDisplay();
@@ -190,5 +204,7 @@ const businesses = [PrimordialSoupLab, StoneAgeToolWorkshop, AgriculturalRevolut
 
 // Uppdaterar inkomsten varje sekund
 setInterval(updateIncome, 1000);
+/*
+setInterval(changeClickImage, 1000);
 
-
+*/
