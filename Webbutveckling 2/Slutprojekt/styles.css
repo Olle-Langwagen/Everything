@@ -61,16 +61,17 @@ button:hover {
     max-width: 100%;
     height: auto;
     transition: transform 0.2s, opacity 0.2s;
+    border-radius: 10px;
 }
 
 #clickImage:hover {
-    transform: scale(1.01); /* Slightly larger zoom on hover */
-    opacity: 0.98; /* Slight opacity reduction for hover effect */
+    transform: scale(1.01);
+    opacity: 0.98;
 }
 
 #clickImage:active {
-    transform: scale(1); /* Shrink the image slightly when pressed */
-    opacity: 0.8; /* Reduce opacity further when active (pressed) */
+    transform: scale(1);
+    opacity: 0.8;
 }
 
 .business {
@@ -87,16 +88,16 @@ button:hover {
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column; /* This ensures the children are stacked vertically */
+    flex-direction: column;
 }
 
 @media (max-width: 768px) {
     .flex-container {
         flex-direction: column;
-        align-items: center; /* This centers its children */
+        align-items: center;
     }
     
     .click-area, .businesses, .upgrades {
-        width: 100%; /* This ensures the sections take the full width */
+        width: 100%;
     }
 }

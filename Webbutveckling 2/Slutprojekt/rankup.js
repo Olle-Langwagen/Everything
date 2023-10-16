@@ -40,7 +40,7 @@ function displayRankInfo() {
 
     // Display next rank criteria if it exists
     if (nextRank) {
-        document.getElementById("nextRankCriteria").textContent = `Businesses: ${nextRank.criteria.businesses}, Money: ${nextRank.criteria.money}`;
+        document.getElementById("nextRankCriteria").textContent = `Businesses: ${nextRank.criteria.businesses}, Resources: ${nextRank.criteria.money}`;
     } else {
         document.getElementById("nextRankCriteria").textContent = "Max Rank Reached!";
     }

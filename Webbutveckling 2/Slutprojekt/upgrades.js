@@ -73,7 +73,7 @@ function resetUpgrades() {
 const upgrades = [];
 
 
-
+//Genererat av chatgpt efter mall som jag skapade:
 const doublePrimordialSoupLabIncome = new Upgrade(
     "Double Primordial Soup Lab Income",
     200,
@@ -220,39 +220,8 @@ const doubleIntergalacticTradeHubIncome = new Upgrade(
 
 
 
-//Lägger till alla uppgraderingar i arrayen.
+//Lägger till alla uppgraderingar i arrayen så man enkelt kan uppdatera.
 upgrades.push(doublePrimordialSoupLabIncome, doubleStoneAgeToolWorkshopIncome, doubleAgriculturalRevolutionFarmIncome, doubleAncientMaritimeVenturesIncome, doubleMedievalAlchemyShopIncome, doubleRenaissanceInventorsWorkshopIncome, doubleIndustrialAgeFactoryIncome, doubleModernTechStartUpIncome, doubleSpaceExplorationCompanyIncome, doubleIntergalacticTradeHubIncome);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
