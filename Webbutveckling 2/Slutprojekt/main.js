@@ -1,7 +1,10 @@
 // Startkapital
-let resources = 1000000000000
+let resources = 0
 let incomeMultiplier = 1;
 
+
+//clicksound taget från https://freesound.org/people/TheWilliamSounds/sounds/686557/
+// Public domain
 const clickSound = new Audio('clicksound.mp3');
 
 //Klick
@@ -29,6 +32,8 @@ document.getElementById('clickImage').addEventListener('click', function(event) 
     }
     const resourcesGenerated = (totalIncome/10)+1;
 
+
+    // Taget från stackoverflow samt youtube och modifierat.
     const resourceElement = document.createElement('div');
     resourceElement.innerText = `+${resourcesGenerated}`;
     resourceElement.style.position = 'absolute';
@@ -168,6 +173,7 @@ class Business {
 
 
 // VERKSAMHETER //
+//Genererat av chatgpt efter mall som jag skapade:
 const PrimordialSoupLab = new Business("Primordial Soup Lab", 10, 0.1);
 PrimordialSoupLab.updateDisplay();
 

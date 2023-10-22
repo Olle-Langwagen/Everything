@@ -50,13 +50,13 @@ window.loadGame = function() {
         updateResources();
         displayRankInfo();
 
-        alert('Game loaded successfully!');
+        alert('Game loaded successfully :)');
     } else {
-        alert('No saved game found.');
+        alert('No saved game found :(');
     }
 }
 
 
 setInterval(() => {
     saveGame();
-}, 100000); //Varje minut
+}, 60000); //Varje minut
