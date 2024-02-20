@@ -1,11 +1,14 @@
-html{
-    height: 100%;
-}
+
 body{
     background: url("images/BG.png") no-repeat;
     background-size: cover;
     background-position: center;
     margin: 0;
+}
+h1{
+    color: white;
+    text-align: center;
+    font-size: 30px;
 }
 #rubriker{
     display: flex;
@@ -24,13 +27,26 @@ body{
     color: white;
     text-shadow: 0px 0px 10px #000000;
 }
-#länkar{
+
+#länkContainer{
     display: flex;
+    justify-content: center;
     flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
     flex-wrap: wrap;
-    margin-top: 50px;
+}
+
+#länkarWebb2{
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+#länkarWebbserver{
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
 }
 
 .box{
